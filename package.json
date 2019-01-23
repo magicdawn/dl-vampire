@@ -26,15 +26,12 @@
   },
   "homepage": "https://github.com/magicdawn/dl-vampire#readme",
   "devDependencies": {
+    "jest": "^23.6.0",
     "codecov": "^3.1.0",
     "eslint": "^5.12.1",
-    "husky": "latest",
-    "istanbul": "^1.1.0-alpha.1",
-    "jest": "^23.6.0",
     "lint-staged": "latest",
-    "mocha": "^5.2.0",
-    "prettier": "latest",
-    "should": "^13.1.0"
+    "husky": "latest",
+    "prettier": "latest"
   },
   "husky": {
     "hooks": {
