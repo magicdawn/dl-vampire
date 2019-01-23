@@ -15,7 +15,7 @@ module.exports = async function vampire({
   assert(file, 'options.file can not be empty')
 
   // no need
-  const need = needDownload({url, file, skipExists})
+  const need = await needDownload({url, file, skipExists})
   if (!need) return {skip: true}
 
   // use chrome user agent
