@@ -26,14 +26,14 @@
   },
   "homepage": "https://github.com/magicdawn/dl-vampire#readme",
   "devDependencies": {
-    "codecov": "^2.3.0",
-    "eslint": "^4.8.0",
-    "istanbul": "^1.1.0-alpha.1",
-    "mocha": "^3.5.3",
-    "should": "^13.1.0",
+    "codecov": "^3.1.0",
+    "eslint": "^5.12.1",
     "husky": "latest",
+    "istanbul": "^1.1.0-alpha.1",
+    "lint-staged": "latest",
+    "mocha": "^5.2.0",
     "prettier": "latest",
-    "lint-staged": "latest"
+    "should": "^13.1.0"
   },
   "husky": {
     "hooks": {
@@ -45,5 +45,14 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "dependencies": {
+    "debug": "^4.1.1",
+    "fs-extra": "^7.0.1",
+    "lodash": "^4.17.11",
+    "log-symbols": "^2.2.0",
+    "promise.retry": "^0.2.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
   }
 }
