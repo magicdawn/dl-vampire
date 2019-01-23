@@ -8,6 +8,14 @@
     "test-cover": "jest --coverage",
     "report-cover": "codecov"
   },
+  "files": [
+    "lib",
+    "index.js",
+    "package.json",
+    "README.md",
+    "LICENSE",
+    "vampire.jpeg"
+  ],
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/magicdawn/dl-vampire.git"
