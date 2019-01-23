@@ -1,6 +1,6 @@
 const assert = require('assert')
 const pretry = require('promise.retry')
-const {needDownload, download} = require('./lib/index.js')
+const {needDownload, download, getSize} = require('./lib/index.js')
 const {CHROME_UA} = require('./lib/constants.js')
 
 module.exports = async function vampire({
@@ -32,3 +32,10 @@ module.exports = async function vampire({
   await tryDownload({url, file, requestOptions})
   return {skip: false}
 }
+
+// export helper function
+Object.assign(module.exports, {
+  needDownload,
+  download,
+  getSize,
+})

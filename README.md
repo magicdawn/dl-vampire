@@ -8,6 +8,8 @@
 [![npm downloads](https://img.shields.io/npm/dm/dl-vampire.svg?style=flat-square)](https://www.npmjs.com/package/dl-vampire)
 [![npm license](https://img.shields.io/npm/l/dl-vampire.svg?style=flat-square)](http://magicdawn.mit-license.org)
 
+![vampire](vampire.jpeg)
+
 ## Install
 
 ```sh
@@ -26,10 +28,10 @@ const dl = require('dl-vampire')
 | ------------------------ | --------- | -------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `options.url`            | `String`  | `true`   |                              | the download url                                                                                                    |
 | `options.file`           | `String`  | `true`   |                              | the local target file path                                                                                          |
-| `options.retry`          | `Object`  | `false`  | `{times: 5, timeout: false}` | retry options, will pass to [promise.retry](https://github.com/magicdawn/promise.retry#pretry)                      |
-| `options.skipExists`     | `Boolean` | `false`  | `true`                       | if local file already exists _AND_ file stat size match response `content-length` size, the download will be skiped |
-| `options.useChromeUa`    | `Boolean` | `false`  | `true`                       | use `user-agent` of the Chrome Browser                                                                              |
-| `options.requestOptions` | `Object`  | `false`  |                              | custom request options, see [request options](https://github.com/request/request#requestoptions-callback)           |
+| `options.retry`          | `Object`  |          | `{times: 5, timeout: false}` | retry options, will pass to [promise.retry](https://github.com/magicdawn/promise.retry#pretry)                      |
+| `options.skipExists`     | `Boolean` |          | `true`                       | if local file already exists _AND_ file stat size match response `content-length` size, the download will be skiped |
+| `options.useChromeUa`    | `Boolean` |          | `true`                       | use `user-agent` of the Chrome Browser                                                                              |
+| `options.requestOptions` | `Object`  |          |                              | custom request options, see [request options](https://github.com/request/request#requestoptions-callback)           |
 
 #### `options.retry.*`
 

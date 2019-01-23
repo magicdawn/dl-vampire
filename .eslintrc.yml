@@ -7,12 +7,13 @@ env:
   mocha: true
   es6: true
   browser: true
+  jest: true
 
 # rules
 rules:
   # basic
   semi: [error, never]
-  quotes: [error, single, { allowTemplateLiterals: true }]
+  quotes: [error, single, {allowTemplateLiterals: true}]
   eqeqeq: error
   camelcase: error
   radix: error
