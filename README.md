@@ -8,7 +8,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/dl-vampire.svg?style=flat-square)](https://www.npmjs.com/package/dl-vampire)
 [![npm license](https://img.shields.io/npm/l/dl-vampire.svg?style=flat-square)](http://magicdawn.mit-license.org)
 
-![vampire](vampire.jpeg)
+![vampire](https://cdn.jsdelivr.net/gh/magicdawn/dl-vampire/vampire.jpeg)
 
 ## Install
 
