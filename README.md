@@ -24,14 +24,15 @@ const dl = require('dl-vampire')
 
 ### `Promise<{skip: Boolean}> dl(options)`
 
-| name                     | type      | required | default value                | description                                                                                                         |
-| ------------------------ | --------- | -------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `options.url`            | `String`  | `true`   |                              | the download url                                                                                                    |
-| `options.file`           | `String`  | `true`   |                              | the local target file path                                                                                          |
-| `options.retry`          | `Object`  |          | `{times: 5, timeout: false}` | retry options, will pass to [promise.retry](https://github.com/magicdawn/promise.retry#pretry)                      |
-| `options.skipExists`     | `Boolean` |          | `true`                       | if local file already exists _AND_ file stat size match response `content-length` size, the download will be skiped |
-| `options.useChromeUa`    | `Boolean` |          | `true`                       | use `user-agent` of the Chrome Browser                                                                              |
-| `options.requestOptions` | `Object`  |          |                              | custom request options, see [request options](https://github.com/request/request#requestoptions-callback)           |
+| name                     | type                 | required | default value                | description                                                                                                         |
+| ------------------------ | -------------------- | -------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `options.url`            | `String`             | `true`   |                              | the download url                                                                                                    |
+| `options.file`           | `String`             | `true`   |                              | the local target file path                                                                                          |
+| `options.retry`          | `Object`             |          | `{times: 5, timeout: false}` | retry options, will pass to [promise.retry](https://github.com/magicdawn/promise.retry#pretry)                      |
+| `options.skipExists`     | `Boolean`            |          | `true`                       | if local file already exists _AND_ file stat size match response `content-length` size, the download will be skiped |
+| `options.useChromeUa`    | `Boolean`            |          | `true`                       | use `user-agent` of the Chrome Browser                                                                              |
+| `options.requestOptions` | `Object`             |          |                              | custom request options, see [request options](https://github.com/request/request#requestoptions-callback)           |
+| `options.onprogress`     | `function(progress)` |          |                              | [got `downloadProgress` event listener](https://github.com/sindresorhus/got#ondownloadprogress-progress)            |
 
 #### `options.retry.*`
 
