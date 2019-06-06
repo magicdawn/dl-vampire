@@ -7,13 +7,6 @@ const url = 'https://www.baidu.com/img/bd_logo1.png'
 const file = __dirname + '/../example-files/bd_logo1.png'
 const redo = () => dl({url, file, skipExists: false})
 
-// const log = require('why-is-node-running')
-// setTimeout(function() {
-//   // console.log(process._getActiveRequests())
-//   // console.log(process._getActiveHandles())
-//   log()
-// }, 3000)
-
 describe('Vampire', function() {
   it('getSize', async function() {
     await redo()

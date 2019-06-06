@@ -7,7 +7,15 @@ module.exports = async function dl(options) {
   options = _.defaultsDeep(options, {
     retry: {times: 5, timeout: false},
   })
-  const {url, file, retry, skipExists, useChromeUa, requestOptions} = options
+  const {
+    url,
+    file,
+    retry,
+    skipExists,
+    useChromeUa,
+    requestOptions,
+    onprogress,
+  } = options
   assert(url, 'options.url can not be empty')
   assert(file, 'options.file can not be empty')
 
@@ -23,7 +31,7 @@ module.exports = async function dl(options) {
 
   // add tryDownload
   vampire.tryDownload = pretry(vampire.download, retry)
-  await vampire.tryDownload({url, file})
+  await vampire.tryDownload({url, file, onprogress})
   return {skip: false}
 }
 
