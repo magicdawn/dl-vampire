@@ -1,41 +1,33 @@
 const assert = require('assert')
 const pretry = require('promise.retry')
-const {needDownload, download, getSize} = require('./lib/index.js')
-const {CHROME_UA} = require('./lib/constants.js')
+const _ = require('lodash')
+const Vampire = require('./lib/vampire.js')
 
-module.exports = async function vampire({
-  url,
-  file,
-  retry = {times: 5, timeout: false},
-  skipExists = true,
-  useChromeUa = true,
-  requestOptions = {},
-}) {
+module.exports = async function dl(options) {
+  options = _.defaultsDeep(options, {
+    retry: {times: 5, timeout: false},
+  })
+  const {url, file, retry, skipExists, useChromeUa, requestOptions} = options
   assert(url, 'options.url can not be empty')
   assert(file, 'options.file can not be empty')
 
+  const vampire = new Vampire({
+    skipExists,
+    useChromeUa,
+    requestOptions,
+  })
+
   // no need
-  const need = await needDownload({url, file, skipExists})
+  const need = await vampire.needDownload({url, file})
   if (!need) return {skip: true}
 
-  // use chrome user agent
-  if (useChromeUa) {
-    Object.assign(requestOptions, {
-      headers: {
-        'user-agent': CHROME_UA,
-      },
-    })
-  }
-
-  // const retry
-  const tryDownload = pretry(download, retry)
-  await tryDownload({url, file, requestOptions})
+  // add tryDownload
+  vampire.tryDownload = pretry(vampire.download, retry)
+  await vampire.tryDownload({url, file})
   return {skip: false}
 }
 
-// export helper function
+// extra exports
 Object.assign(module.exports, {
-  needDownload,
-  download,
-  getSize,
+  Vampire,
 })
