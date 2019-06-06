@@ -7,7 +7,7 @@ const {Vampire} = dl
 const url = 'https://www.baidu.com/img/bd_logo1.png'
 const file = __dirname + '/../example-files/bd_logo1.png'
 
-describe('dl', function() {
+describe('download', function() {
   it('fail when timeout', async () => {
     // dns lookup 时间较长
     return dl({url: 'bad-url', file}).should.rejectedWith({
