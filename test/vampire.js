@@ -38,6 +38,10 @@ describe('Vampire', function() {
     })
 
     it.only('bad url', async () => {
+      // download first
+      await redo()
+
+      // head content-length logic
       const vampire = new Vampire()
       return vampire.needDownload({url: 'bad-url', file}).should.rejectedWith({
         message: /getaddrinfo ENOTFOUND bad-url/,
