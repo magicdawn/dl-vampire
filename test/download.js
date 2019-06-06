@@ -8,13 +8,6 @@ const url = 'https://www.baidu.com/img/bd_logo1.png'
 const file = __dirname + '/../example-files/bd_logo1.png'
 
 describe('download', function() {
-  it('fail when timeout', async () => {
-    // dns lookup 时间较长
-    return dl({url: 'bad-url', file}).should.rejectedWith({
-      message: /getaddrinfo ENOTFOUND bad-url/,
-    })
-  })
-
   it('download works', async function() {
     const ret = await dl({
       url,

@@ -36,5 +36,12 @@ describe('Vampire', function() {
       const need = await vampire.needDownload({url, file})
       need.should.equal(false)
     })
+
+    it.only('bad url', async () => {
+      const vampire = new Vampire()
+      return vampire.needDownload({url: 'bad-url', file}).should.rejectedWith({
+        message: /getaddrinfo ENOTFOUND bad-url/,
+      })
+    })
   })
 })
