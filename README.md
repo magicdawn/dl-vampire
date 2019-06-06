@@ -10,6 +10,12 @@
 
 ![vampire](https://cdn.jsdelivr.net/gh/magicdawn/dl-vampire/vampire.jpeg)
 
+## Highlight
+
+- [x] skip mechanism, local file & content-length
+- [x] retry / timeout support
+- [x] stream to file, not ate memory like the `download` module
+
 ## Install
 
 ```sh
