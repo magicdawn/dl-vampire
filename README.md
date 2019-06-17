@@ -15,7 +15,7 @@
 - [x] skip mechanism, local file & content-length
 - [x] retry / timeout support
 - [x] stream to file, not ate memory like the [download](https://github.com/kevva/download/issues?utf8=%E2%9C%93&q=memory+) module
-- [x] download progress support, via awesome [got](https://github.com/sindresorhus/got) library
+- [x] download progress support, via awesome [got](https://github.com/sindresorhus/got) module
 
 ## Install
 
