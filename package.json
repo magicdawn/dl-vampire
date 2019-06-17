@@ -38,7 +38,6 @@
     "fs-extra": "^8.0.1",
     "got": "^9.6.0",
     "lodash": "^4.17.11",
-    "log-symbols": "^3.0.0",
     "promise.retry": "^0.2.0"
   },
   "devDependencies": {

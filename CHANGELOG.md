@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.0.4 2019-06-17
+
+- remove unused dep `log-symbols`
+
 ## v0.0.3 2019-06-06
 
 - use `got` instead of `request` / `request-promise`, for `downloadProgress` event
