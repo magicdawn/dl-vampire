@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.1.0 2020-01-21
+
+- add types/index.d.ts
+
 ## v0.0.4 2019-06-17
 
 - remove unused dep `log-symbols`
