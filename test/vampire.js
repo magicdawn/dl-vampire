@@ -37,7 +37,7 @@ describe('Vampire', function() {
       need.should.equal(false)
     })
 
-    it.only('bad url', async () => {
+    it('bad url', async () => {
       // download first
       await redo()
 
