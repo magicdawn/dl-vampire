@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.2.0 2020-02-26
+
+- add `readUrl`
+- add `readUrl` & `Vampire` to types/index.d.ts
+
 ## v0.1.0 2020-01-21
 
 - add types/index.d.ts
