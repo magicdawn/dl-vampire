@@ -27,6 +27,7 @@ $ npm i dl-vampire --save
 
 ```js
 const dl = require('dl-vampire')
+const {Vamipre, readUrl} = dl
 ```
 
 ### `Promise<{skip: Boolean}> dl(options)`
@@ -55,6 +56,38 @@ more see https://github.com/magicdawn/promise.retry
 
 - if finally the download is skiped, the return promise will resolve to `{skip: true}`
 - else it will resolve to `{skip: false}`
+
+### `new Vampire(options: VampireNewOptions)`
+
+```ts
+export interface VampireNewOptions {
+  skipExists?: boolean
+  useChromeUa?: boolean
+  requestOptions?: Object
+}
+```
+
+see [types/index.d.ts](types/index.d.ts) file
+
+### `readUrl(options: ReadUrlOptions): Promise<string> | Promise<Buffer>`
+
+```ts
+export interface ReadUrlOptions extends VampireNewOptions {
+  url: string
+  file?: string
+  onprogress?: (p: DownloadProgressItem) => any
+  retry?: RetryOptions
+
+  // extra
+  encoding?: string
+}
+
+export function readUrl<T extends ReadUrlOptions>(
+  options: T
+): T extends {encoding: string} ? Promise<string> : Promise<Buffer>
+```
+
+see [types/index.d.ts](types/index.d.ts) file
 
 ## Changelog
 
