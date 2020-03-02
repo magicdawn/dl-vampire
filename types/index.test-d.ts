@@ -1,20 +1,20 @@
-import dl, {DownloadOptions, DownloadResult, DownloadProgressItem, Vampire, readUrl} from './'
+import dl, {DlOptions, DownloadResult, DownloadProgressItem, Vampire, readUrl} from './'
 import {expectType} from 'tsd'
 import pretry from 'promise.retry'
 
 {
-  const options: DownloadOptions = {
+  const options: DlOptions = {
     url: '',
     file: '',
   }
 }
 
 {
-  const options: DownloadOptions = {
+  const options: DlOptions = {
     url: '',
     file: '',
     skipExists: false,
-    onprogress(p) {
+    onprogress(p: DownloadProgressItem) {
       console.log(p.percent)
     },
     retry: {
@@ -28,10 +28,24 @@ import pretry from 'promise.retry'
 expectType<Promise<DownloadResult>>(dl({url: '', file: ''}))
 
 // Vampire#new
-const v = new Vampire({skipExists: true, useChromeUa: true, requestOptions: {}})
+const v = new Vampire({useChromeUa: true, requestOptions: {}})
 
 // #needDownload
 expectType<Promise<boolean>>(v.needDownload({url: '', file: ''}))
+expectType<Promise<boolean>>(v.needDownload({url: '', file: '', skipExists: false}))
+expectType<Promise<boolean>>(v.needDownload({url: '', file: '', skipExists: true, expectSize: 10}))
+expectType<Promise<boolean>>(
+  v.needDownload({url: '', file: '', skipExists: true, expectHash: '1234'})
+)
+expectType<Promise<boolean>>(
+  v.needDownload({
+    url: '',
+    file: '',
+    skipExists: true,
+    expectHash: '1234',
+    expectHashAlgorithm: 'sha1',
+  })
+)
 
 // # download
 expectType<Promise<void>>(v.download({url: '', file: '', onprogress(p) {}}))
@@ -43,3 +57,5 @@ expectType<Promise<void>>(tryDownload({url: '', file: ''}))
 // readUrl
 expectType<Promise<Buffer>>(readUrl({url: ''}))
 expectType<Promise<string>>(readUrl({url: '', encoding: 'utf8'}))
+expectType<Promise<Buffer>>(readUrl({url: '', expectSize: 10}))
+expectType<Promise<Buffer>>(readUrl({url: '', expectHash: 'the-hash'}))
