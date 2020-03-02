@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v0.3.0 2020-03-02
+
+- add `expectSize` / `expectHash` / `expectHashAlgorithm` to `dl` options
+- refactor Vampire, move `skipExists` & new add validate options to `Vampire#needDownload`
+
+Since AWS request has signatures, so HEAD request that url would fail
+So U should provide the `expectSize` to avoid the HEAD request
+
 ## v0.2.1 2020-02-26
 
 - add API doc to readme.md
