@@ -32,15 +32,18 @@ const {Vamipre, readUrl} = dl
 
 ### `Promise<{skip: Boolean}> dl(options)`
 
-| name                     | type                 | required | default value                | description                                                                                                         |
-| ------------------------ | -------------------- | -------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `options.url`            | `String`             | `true`   |                              | the download url                                                                                                    |
-| `options.file`           | `String`             | `true`   |                              | the local target file path                                                                                          |
-| `options.retry`          | `Object`             |          | `{times: 5, timeout: false}` | retry options, will pass to [promise.retry](https://github.com/magicdawn/promise.retry#pretry)                      |
-| `options.skipExists`     | `Boolean`            |          | `true`                       | if local file already exists _AND_ file stat size match response `content-length` size, the download will be skiped |
-| `options.useChromeUa`    | `Boolean`            |          | `true`                       | use `user-agent` of the Chrome Browser                                                                              |
-| `options.requestOptions` | `Object`             |          |                              | custom request options, see [request options](https://github.com/request/request#requestoptions-callback)           |
-| `options.onprogress`     | `function(progress)` |          |                              | [got `downloadProgress` event listener](https://github.com/sindresorhus/got#ondownloadprogress-progress)            |
+| name                          | type                 | required | default value                | description                                                                                                           |
+| ----------------------------- | -------------------- | -------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `options.url`                 | `String`             | `true`   |                              | the download url                                                                                                      |
+| `options.file`                | `String`             | `true`   |                              | the local target file path                                                                                            |
+| `options.onprogress`          | `function(progress)` |          |                              | [got `downloadProgress` event listener](https://github.com/sindresorhus/got#ondownloadprogress-progress)              |
+| `options.retry`               | `Object`             |          | `{times: 5, timeout: false}` | retry options, will pass to [promise.retry](https://github.com/magicdawn/promise.retry#pretry)                        |
+| `options.skipExists`          | `boolean`            |          | `true`                       | if local file already exists _AND_ file stat size match response `content-length` size, the download will be skiped   |
+| `options.expectSize`          | `number`             |          |                              | validate local file `stat.size === expectSize`, if check pass the download will be skiped                             |
+| `options.expectHash`          | `string`             |          |                              | validate local file `file.hash === expectHash`, using `expectHashAlgorithm` if check pass the download will be skiped |
+| `options.expectHashAlgorithm` | `string`             |          | `'md5'`                      | the expect hash algorithm, default `md5`                                                                              |
+| `options.useChromeUa`         | `Boolean`            |          | `true`                       | use `user-agent` of the Chrome Browser                                                                                |
+| `options.requestOptions`      | `Object`             |          |                              | custom request options, see [request options](https://github.com/request/request#requestoptions-callback)             |
 
 #### `options.retry.*`
 
@@ -52,6 +55,19 @@ const {Vamipre, readUrl} = dl
 
 more see https://github.com/magicdawn/promise.retry
 
+#### `ts def`
+
+```ts
+export interface DlOptions
+  extends VampireNewOptions,
+    VampireNeedDownloadOptions,
+    VampireDownloadOptions {
+  retry?: RetryOptions
+}
+
+export default function dl(options: DlOptions): Promise<DownloadResult>
+```
+
 ### return type
 
 - if finally the download is skiped, the return promise will resolve to `{skip: true}`
@@ -61,9 +77,25 @@ more see https://github.com/magicdawn/promise.retry
 
 ```ts
 export interface VampireNewOptions {
-  skipExists?: boolean
   useChromeUa?: boolean
   requestOptions?: Object
+}
+```
+
+see [types/index.d.ts](types/index.d.ts) file
+
+### `Vampire#needDownload(options: VampireNeedDownloadOptions)`
+
+```ts
+export interface VampireNeedDownloadOptions {
+  url: string
+  file: string
+
+  // validate
+  skipExists?: boolean
+  expectSize?: number
+  expectHash?: string
+  expectHashAlgorithm?: string
 }
 ```
 
@@ -75,8 +107,16 @@ see [types/index.d.ts](types/index.d.ts) file
 export interface ReadUrlOptions extends VampireNewOptions {
   url: string
   file?: string
+
+  // download extra
   onprogress?: (p: DownloadProgressItem) => any
   retry?: RetryOptions
+
+  // validate
+  skipExists?: boolean
+  expectSize?: number
+  expectHash?: string
+  expectHashAlgorithm?: string
 
   // extra
   encoding?: string
