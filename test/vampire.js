@@ -77,7 +77,8 @@ describe('Vampire', function() {
       // head content-length logic
       const vampire = new Vampire()
       return vampire.needDownload({url: 'bad-url', file}).should.rejectedWith({
-        message: /getaddrinfo ENOTFOUND bad-url/,
+        // message: /getaddrinfo ENOTFOUND bad-url/,
+        message: /Invalid URL: bad-url/,
       })
     })
   })

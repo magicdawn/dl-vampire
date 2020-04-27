@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.4.0 2020-04-27
+
+- update `got` to latest v11.x, use `stream.pipeline` insteadof `stream.pipe`
+
 ## v0.3.0 2020-03-02
 
 - add `expectSize` / `expectHash` / `expectHashAlgorithm` to `dl` options
