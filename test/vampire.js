@@ -1,4 +1,3 @@
-const should = require('should')
 const fse = require('fs-extra')
 const dl = require('../lib/dl')
 const Vampire = require('../lib/vampire')

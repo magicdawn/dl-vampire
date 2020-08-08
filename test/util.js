@@ -1,4 +1,3 @@
-require('should')
 const {getFileHash} = require('../lib/util')
 
 describe('util', () => {

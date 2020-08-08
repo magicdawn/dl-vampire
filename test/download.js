@@ -1,5 +1,4 @@
 const fs = require('fs-extra')
-const should = require('should')
 const _ = require('lodash')
 const dl = require('..')
 
