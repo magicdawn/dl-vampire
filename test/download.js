@@ -2,13 +2,12 @@ const fs = require('fs-extra')
 const should = require('should')
 const _ = require('lodash')
 const dl = require('..')
-const {Vampire} = dl
 
 const url = 'https://www.baidu.com/img/bd_logo1.png'
 const file = __dirname + '/../example-files/bd_logo1.png'
 
-describe('download', function() {
-  it('download works', async function() {
+describe('download', function () {
+  it('download works', async function () {
     const ret = await dl({
       url,
       file,
@@ -22,7 +21,7 @@ describe('download', function() {
     fs.existsSync(file).should.ok()
   })
 
-  it('progress works', async function() {
+  it('progress works', async function () {
     const ps = []
 
     // download

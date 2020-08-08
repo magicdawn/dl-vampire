@@ -1,14 +1,11 @@
 import {RetryOptions, OnCancel} from 'promise.retry'
-import {Progress as DownloadProgressItem} from 'got'
 
 // https://github.com/sindresorhus/got/blob/v9.6.0/source/progress.js#L16
-// got@v10 use TypeScript
-// export interface DownloadProgressItem {
-//   percent: number
-//   transferred: number
-//   total: number
-// }
-export {DownloadProgressItem}
+export interface DownloadProgressItem {
+  percent: number
+  transferred: number
+  total: number
+}
 
 export interface VampireNewOptions {
   useChromeUa?: boolean

@@ -8,8 +8,8 @@ const url = 'https://www.baidu.com/img/bd_logo1.png'
 const file = __dirname + '/../example-files/bd_logo1.png'
 const redo = () => dl({url, file, skipExists: false})
 
-describe('Vampire', function() {
-  it('getSize', async function() {
+describe('Vampire', function () {
+  it('getSize', async function () {
     await redo()
     const vampire = new Vampire()
     const size = await vampire.getSize(url)
@@ -17,8 +17,8 @@ describe('Vampire', function() {
     size.should.equal(realsize)
   })
 
-  describe('needDownload', function() {
-    it('when skipExists = false', async function() {
+  describe('needDownload', function () {
+    it('when skipExists = false', async function () {
       const vampire = new Vampire()
       return vampire.needDownload({url, file, skipExists: false}).should.resolvedWith(true)
     })
@@ -63,7 +63,7 @@ describe('Vampire', function() {
         .should.resolvedWith(true)
     })
 
-    it('it works', async function() {
+    it('it works', async function () {
       await redo()
       const vampire = new Vampire()
       const need = await vampire.needDownload({url, file})
@@ -77,8 +77,8 @@ describe('Vampire', function() {
       // head content-length logic
       const vampire = new Vampire()
       return vampire.needDownload({url: 'bad-url', file}).should.rejectedWith({
-        // message: /getaddrinfo ENOTFOUND bad-url/,
-        message: /Invalid URL: bad-url/,
+        message: /getaddrinfo ENOTFOUND bad-url/,
+        // message: /Invalid URL: bad-url/,
       })
     })
   })
