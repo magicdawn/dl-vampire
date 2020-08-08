@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.5.0 2020-08-08
+
+- revert got to v9.x for its bad proxy support, and create a `new-got` branch.
+
 ## v0.4.0 2020-04-27
 
 - update `got` to latest v11.x, use `stream.pipeline` insteadof `stream.pipe`
