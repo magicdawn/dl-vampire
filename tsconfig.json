@@ -1,0 +1,18 @@
+{
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "target": "es2019",
+    "module": "CommonJS",
+    "strictNullChecks": true
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "swc": true
+  }
+}

@@ -1,16 +1,39 @@
-const path = require('path')
-const _ = require('lodash')
-const fse = require('fs-extra')
-const debug = require('debug')('dl-vampire:vampire')
-const got = require('got')
-const EventEmitter = require('events')
-const {getFileHash} = require('./util')
+import _debug from 'debug'
+import EventEmitter from 'events'
+import fse from 'fs-extra'
+import got, { Got, Options, Progress } from 'got'
+import _ from 'lodash'
+import path from 'path'
+import { pipeline } from 'stream/promises'
+import { getFileHash } from './util'
+
+const debug = _debug('dl-vampire:vampire')
 
 const CHROME_UA =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.99 Safari/537.36'
 
-module.exports = class Vampire extends EventEmitter {
-  constructor(options) {
+export interface VampireNewOptions {
+  useChromeUa?: boolean
+  requestOptions?: Options
+}
+
+// for validating existing files
+export interface ValidateExistingFileOptions {
+  skipExists?: boolean
+  expectSize?: number
+  expectHash?: string
+  expectHashAlgorithm?: string
+}
+
+export interface DownloadInput {
+  url: string
+  file: string
+}
+
+export type OnProgress = (progress: Progress) => void
+
+export class Vampire extends EventEmitter {
+  constructor(options?: VampireNewOptions) {
     super()
 
     options = _.defaults(options, {
@@ -27,11 +50,13 @@ module.exports = class Vampire extends EventEmitter {
     this.config(options)
   }
 
-  config(options) {
-    const instance = this.request
-    const {useChromeUa, requestOptions} = options
+  request: Got
 
-    const update = (obj) => {
+  config(options: VampireNewOptions) {
+    const instance = this.request
+    const { useChromeUa, requestOptions } = options
+
+    const update = (obj: Options) => {
       instance.defaults.options = got.mergeOptions(instance.defaults.options, obj)
     }
 
@@ -53,20 +78,19 @@ module.exports = class Vampire extends EventEmitter {
   /**
    * get content-length
    */
-  async getSize(url) {
+  async getSize(url: string) {
     const res = await this.request.head(url)
-    let len = res.headers['content-length']
+    const len = res.headers['content-length']
     if (!len) return
-
-    len = Number(len)
     debug('content-length = %s for %s', len, url)
-    return len
+
+    const lenNum = Number(len)
+    return lenNum
   }
 
   /**
    * 是否有需要下载一个文件
    */
-
   async needDownload({
     url,
     file,
@@ -74,17 +98,17 @@ module.exports = class Vampire extends EventEmitter {
     expectSize,
     expectHash,
     expectHashAlgorithm = 'md5',
-  }) {
+  }: DownloadInput & ValidateExistingFileOptions) {
     // 不跳过, 下载
     if (!skipExists) return true
 
     // if not exists, go to download
-    const exists = await fse.exists(file)
+    const exists = await fse.pathExists(file)
     if (!exists) return true
 
     // hash check
     if (expectHash) {
-      const hash = await getFileHash({file, alg: expectHashAlgorithm})
+      const hash = await getFileHash({ file, alg: expectHashAlgorithm })
       if (hash !== expectHash) {
         debug('needDownload: true, hash = %s & expectHash = %s', hash, expectHash)
         return true
@@ -116,48 +140,27 @@ module.exports = class Vampire extends EventEmitter {
   /**
    * 下载一个文件
    */
-
-  async download({url, file, onprogress}, onCancel) {
-    // ensure & construct
+  async download(
+    { url, file, onprogress }: { url: string; file: string; onprogress?: OnProgress },
+    onCancel?: (cb: () => void) => void
+  ) {
+    // file
     file = path.resolve(file)
     await fse.ensureDir(path.dirname(file))
     const fileStream = fse.createWriteStream(file)
 
-    return new Promise((resolve, reject) => {
-      const networkStream = this.request.stream(url)
-      let req
+    // network
+    const networkStream = this.request.stream(url)
+    if (onprogress) {
+      networkStream.on('downloadProgress', onprogress)
+    }
 
-      // networkStream
-      /* eslint no-unused-vars: off */
-      networkStream.on('error', (err, body, response) => {
-        reject(err)
-      })
-      networkStream.on('request', (request) => {
-        req = request
-      })
-      if (onprogress) {
-        networkStream.on('downloadProgress', (progress) => {
-          onprogress(progress)
-        })
-      }
-
-      // fileStream
-      fileStream.on('error', reject)
-      fileStream.on('finish', function () {
-        this.close(() => {
-          resolve()
-        })
-      })
-
-      // pipe
-      networkStream.pipe(fileStream)
-
-      // clean
-      onCancel &&
-        onCancel(() => {
-          req && req.abort()
-          fileStream && fileStream.close()
-        })
+    // clean when cancel
+    onCancel?.(() => {
+      fileStream.close()
+      networkStream.destroy()
     })
+
+    return pipeline(networkStream, fileStream)
   }
 }

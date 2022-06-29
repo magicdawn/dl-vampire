@@ -10,3 +10,7 @@ coverage
 coverage.*
 
 /example-files
+
+# ts
+**/*.tsbuildinfo
+/lib
