@@ -18,12 +18,12 @@ describe('download', function () {
         },
       },
     })
-    ret.should.eql({ skip: false })
-    fs.existsSync(file).should.ok()
+    expect(ret).toEqual({ skip: false })
+    expect(fs.existsSync(file)).toBeTruthy()
 
     const ret2 = await dl({ url, file })
-    ret2.should.eql({ skip: true })
-    fs.existsSync(file).should.ok()
+    expect(ret2).toEqual({ skip: true })
+    expect(fs.existsSync(file)).toBeTruthy()
   })
 
   it('progress works', async function () {
@@ -38,11 +38,11 @@ describe('download', function () {
         ps.push(p)
       },
     })
-    ret.should.eql({ skip: false })
-    fs.existsSync(file).should.ok()
+    expect(ret).toEqual({ skip: false })
+    expect(fs.existsSync(file)).toBeTruthy()
 
     // ps
-    ps.length.should.above(0)
-    _.last(ps)!.percent.should.equal(1)
+    expect(ps.length).toBeGreaterThan(0)
+    expect(_.last(ps)!.percent).toEqual(1)
   })
 })
