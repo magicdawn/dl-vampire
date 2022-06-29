@@ -1,4 +1,8 @@
-require: [should]
+extension: [ts]
+require:
+  - should
+  - ts-node/register
+  - source-map-support/register
 reporter: spec
 timeout: 20000
 recursive: true

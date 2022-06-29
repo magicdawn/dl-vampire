@@ -30,6 +30,7 @@ export interface DownloadInput {
   file: string
 }
 
+export type { Progress }
 export type OnProgress = (progress: Progress) => void
 
 export class Vampire extends EventEmitter {

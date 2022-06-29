@@ -12,10 +12,14 @@ export type ReadUrlOptions = Omit<DlOptions, 'file'> & {
   file?: string
 }
 
+export type ReadUrlOptionsWithEncoding = ReadUrlOptions & {
+  encoding: string
+}
+
 export async function readUrl(opts: ReadUrlOptions): Promise<Buffer>
-export async function readUrl(opts: ReadUrlOptions & { encoding: string }): Promise<string>
+export async function readUrl(opts: ReadUrlOptionsWithEncoding): Promise<string>
 export async function readUrl(
-  opts: ReadUrlOptions | (ReadUrlOptions & { encoding: string })
+  opts: ReadUrlOptions | ReadUrlOptionsWithEncoding
 ): Promise<string | Buffer> {
   const options = { ...opts }
   assert(options.url, 'options.url is required')

@@ -59,6 +59,6 @@ export async function dl(options: DlOptions) {
 
   // tryDownload
   const tryDownload = pretry(vampire.download, retry)
-  await tryDownload.call(this, { url, file, onprogress })
+  await tryDownload.call(vampire, { url, file, onprogress })
   return { skip: false }
 }
