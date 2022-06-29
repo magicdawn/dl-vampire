@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.0.0 2022-06-29
+
+- upgrade got v11
+- move to TypeScript
+- add proxy-agent support
+
 ## v0.5.0 2020-08-08
 
 - revert got to v9.x for its bad proxy support, and create a `new-got` branch.

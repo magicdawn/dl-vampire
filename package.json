@@ -6,12 +6,10 @@
   "types": "lib/index.d.ts",
   "files": [
     "lib",
-    "index.js",
-    "types/index.d.ts",
     "package.json",
     "README.md",
-    "LICENSE",
-    "vampire.jpeg"
+    "vampire.jpeg",
+    "LICENSE"
   ],
   "scripts": {
     "prepare": "husky install",

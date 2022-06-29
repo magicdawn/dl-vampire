@@ -27,10 +27,10 @@ $ npm i dl-vampire --save
 
 ```js
 const dl = require('dl-vampire')
-const {Vamipre, readUrl} = dl
+const { Vamipre, readUrl } = dl
 ```
 
-### `Promise<{skip: Boolean}> dl(options)`
+### `dl(options: DlOptions) => Promise<{skip: boolean}>`
 
 | name                          | type                 | required | default value                | description                                                                                                           |
 | ----------------------------- | -------------------- | -------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -43,7 +43,11 @@ const {Vamipre, readUrl} = dl
 | `options.expectHash`          | `string`             |          |                              | validate local file `file.hash === expectHash`, using `expectHashAlgorithm` if check pass the download will be skiped |
 | `options.expectHashAlgorithm` | `string`             |          | `'md5'`                      | the expect hash algorithm, default `md5`                                                                              |
 | `options.useChromeUa`         | `Boolean`            |          | `true`                       | use `user-agent` of the Chrome Browser                                                                                |
+| `options.useProxyEnv`         | `Boolean`            |          | `true`                       | use `proxy-agent` module, will use `http_proxy` / `https_proxy` / `all_proxy` env variable                            |
 | `options.requestOptions`      | `Object`             |          |                              | custom request options, see [request options](https://github.com/request/request#requestoptions-callback)             |
+
+- if finally the download is skiped, the return promise will resolve to `{skip: true}`
+- else it will resolve to `{skip: false}`
 
 #### `options.retry.*`
 
@@ -55,79 +59,15 @@ const {Vamipre, readUrl} = dl
 
 more see https://github.com/magicdawn/promise.retry
 
-#### `ts def`
+#### `ts types`
 
 ```ts
-export interface DlOptions
-  extends VampireNewOptions,
-    VampireNeedDownloadOptions,
-    VampireDownloadOptions {
-  retry?: RetryOptions
-}
+// options for dl() / readUrl()
+import type { DlOptions, ReadUrlOptions, ReadUrlOptionsWithEncoding } from 'dl-vampire'
 
-export default function dl(options: DlOptions): Promise<DownloadResult>
+// onpregress type, and progress arg type
+import type { OnProgress, Progress } from 'dl-vampire'
 ```
-
-### return type
-
-- if finally the download is skiped, the return promise will resolve to `{skip: true}`
-- else it will resolve to `{skip: false}`
-
-### `new Vampire(options: VampireNewOptions)`
-
-```ts
-export interface VampireNewOptions {
-  useChromeUa?: boolean
-  requestOptions?: Object
-}
-```
-
-see [types/index.d.ts](types/index.d.ts) file
-
-### `Vampire#needDownload(options: VampireNeedDownloadOptions)`
-
-```ts
-export interface VampireNeedDownloadOptions {
-  url: string
-  file: string
-
-  // validate
-  skipExists?: boolean
-  expectSize?: number
-  expectHash?: string
-  expectHashAlgorithm?: string
-}
-```
-
-see [types/index.d.ts](types/index.d.ts) file
-
-### `readUrl(options: ReadUrlOptions): Promise<string> | Promise<Buffer>`
-
-```ts
-export interface ReadUrlOptions extends VampireNewOptions {
-  url: string
-  file?: string
-
-  // download extra
-  onprogress?: (p: DownloadProgressItem) => any
-  retry?: RetryOptions
-
-  // validate
-  skipExists?: boolean
-  expectSize?: number
-  expectHash?: string
-  expectHashAlgorithm?: string
-
-  // extra
-  encoding?: string
-}
-
-export function readUrl<T extends ReadUrlOptions>(
-  options: T
-): T extends {encoding: string} ? Promise<string> : Promise<Buffer>
-```
-
-see [types/index.d.ts](types/index.d.ts) file
 
 ## Changelog
 
