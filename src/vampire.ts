@@ -4,6 +4,7 @@ import fse from 'fs-extra'
 import got, { Got, Options, Progress } from 'got'
 import _ from 'lodash'
 import path from 'path'
+import ProxyAgent from 'proxy-agent'
 import { pipeline } from 'stream/promises'
 import { getFileHash } from './util'
 
@@ -14,6 +15,7 @@ const CHROME_UA =
 
 export interface VampireNewOptions {
   useChromeUa?: boolean
+  useProxyEnv?: boolean
   requestOptions?: Options
 }
 
@@ -39,6 +41,7 @@ export class Vampire extends EventEmitter {
 
     options = _.defaults(options, {
       useChromeUa: true,
+      useProxyEnv: true,
       requestOptions: {},
     })
 
@@ -55,7 +58,7 @@ export class Vampire extends EventEmitter {
 
   config(options: VampireNewOptions) {
     const instance = this.request
-    const { useChromeUa, requestOptions } = options
+    const { useChromeUa, useProxyEnv, requestOptions } = options
 
     const update = (obj: Options) => {
       instance.defaults.options = got.mergeOptions(instance.defaults.options, obj)
@@ -66,6 +69,17 @@ export class Vampire extends EventEmitter {
       update({
         headers: {
           'user-agent': CHROME_UA,
+        },
+      })
+    }
+
+    // use http_proxy / https_proxy / all_proxy env
+    if (useProxyEnv) {
+      const agent = new ProxyAgent()
+      update({
+        agent: {
+          http: agent,
+          https: agent,
         },
       })
     }
