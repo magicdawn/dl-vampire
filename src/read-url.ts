@@ -1,11 +1,12 @@
 import assert from 'assert'
-import d from 'debug'
+import debugFactory from 'debug'
 import fse from 'fs-extra'
 import { tmpdir } from 'os'
 import { join } from 'path'
 import { dl, DlOptions } from './dl'
 import { md5 } from './util'
-const debug = d('dl-vampire:read-url')
+
+const debug = debugFactory('dl-vampire:read-url')
 
 export type ReadUrlOptions = Omit<DlOptions, 'file'> & {
   // file is optional in readUrl()
