@@ -1,5 +1,5 @@
 import assert from 'assert'
-import _ from 'lodash'
+import { HTTPError } from 'got'
 import pretry, { RetryOptions } from 'promise.retry'
 import {
   DownloadInput,
@@ -15,6 +15,11 @@ export type DlOptions = VampireNewOptions & // new Vampire()
     // download extra
     retry?: RetryOptions
     onprogress?: OnProgress
+    /**
+     * Print detail before error thrown
+     * @defaultValue `true`
+     */
+    inspectError?: boolean
   }
 
 export async function dl(options: DlOptions) {
@@ -36,6 +41,7 @@ export async function dl(options: DlOptions) {
     // download extra
     retry = { times: 5 } as RetryOptions,
     onprogress,
+    inspectError = true,
   } = options
 
   assert(url, 'options.url can not be empty')
@@ -46,19 +52,45 @@ export async function dl(options: DlOptions) {
     requestOptions,
   })
 
+  const tryInspectError = (e?: Error) => {
+    if (!inspectError || !e) return
+
+    if (e instanceof HTTPError) {
+      console.error(
+        '[dl-vampire]: HTTPError happens for url=%s file=%s statusCode=%s',
+        url,
+        file,
+        e.response.statusCode
+      )
+    } else {
+      console.error('[dl-vampire]: error happens for url=%s file=%s', url, file)
+    }
+  }
+
   // no need
-  const need = await vampire.needDownload({
-    url,
-    file,
-    skipExists,
-    expectSize,
-    expectHash,
-    expectHashAlgorithm,
-  })
-  if (!need) return { skip: true }
+  try {
+    const need = await vampire.needDownload({
+      url,
+      file,
+      skipExists,
+      expectSize,
+      expectHash,
+      expectHashAlgorithm,
+    })
+    if (!need) return { skip: true }
+  } catch (e) {
+    tryInspectError(e)
+    throw e
+  }
 
   // tryDownload
   const tryDownload = pretry(vampire.download, retry)
-  await tryDownload.call(vampire, { url, file, onprogress })
-  return { skip: false }
+
+  try {
+    await tryDownload.call(vampire, { url, file, onprogress })
+    return { skip: false }
+  } catch (e) {
+    tryInspectError(e)
+    throw e
+  }
 }

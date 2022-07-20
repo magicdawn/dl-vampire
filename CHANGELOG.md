@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.0.1 2022-07-20
+
+- remove file when 404 error
+- add `dl({ inspectError: true })` option to print `url` & `file` before throw `RetryError`
+- export util `is404Error`, got `RequestError` / `HTTPError` etc
+
 ## v1.0.0 2022-06-29
 
 - upgrade got v11

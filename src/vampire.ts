@@ -6,7 +6,7 @@ import _ from 'lodash'
 import path from 'path'
 import ProxyAgent from 'proxy-agent'
 import { pipeline } from 'stream/promises'
-import { getFileHash } from './util'
+import { getFileHash, is404Error } from './util'
 
 const debug = debugFactory('dl-vampire:vampire')
 
@@ -14,8 +14,21 @@ const CHROME_UA =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.99 Safari/537.36'
 
 export interface VampireNewOptions {
+  /**
+   * use chrome's user-agent
+   * @defaultValue `true`
+   */
   useChromeUa?: boolean
+
+  /**
+   * use http_proxy / https_proxy / all_proxy environment variables, see {@link https://npm.im/proxy-agent ProxyAgent}
+   * @defaultValue `true`
+   */
   useProxyEnv?: boolean
+
+  /**
+   * more got options
+   */
   requestOptions?: Options
 }
 
@@ -43,7 +56,7 @@ export class Vampire extends EventEmitter {
       useChromeUa: true,
       useProxyEnv: true,
       requestOptions: {},
-    })
+    } as VampireNewOptions)
 
     // request
     this.request = got.extend({
@@ -94,13 +107,20 @@ export class Vampire extends EventEmitter {
    * get content-length
    */
   async getSize(url: string) {
-    const res = await this.request.head(url)
-    const len = res.headers['content-length']
-    if (!len) return
-    debug('content-length = %s for %s', len, url)
-
-    const lenNum = Number(len)
-    return lenNum
+    try {
+      const res = await this.request.head(url)
+      const len = res.headers['content-length']
+      if (!len) return
+      debug('content-length = %s for %s', len, url)
+      const lenNum = Number(len)
+      return lenNum
+    } catch (e) {
+      if (is404Error(e)) {
+        return undefined
+      } else {
+        throw e
+      }
+    }
   }
 
   /**
@@ -159,16 +179,16 @@ export class Vampire extends EventEmitter {
     { url, file, onprogress }: { url: string; file: string; onprogress?: OnProgress },
     onCancel?: (cb: () => void) => void
   ) {
-    // file
-    file = path.resolve(file)
-    await fse.ensureDir(path.dirname(file))
-    const fileStream = fse.createWriteStream(file)
-
     // network
     const networkStream = this.request.stream(url)
     if (onprogress) {
       networkStream.on('downloadProgress', onprogress)
     }
+
+    // file
+    file = path.resolve(file)
+    await fse.ensureDir(path.dirname(file))
+    const fileStream = fse.createWriteStream(file)
 
     // clean when cancel
     onCancel?.(() => {
@@ -176,6 +196,14 @@ export class Vampire extends EventEmitter {
       networkStream.destroy()
     })
 
-    return pipeline(networkStream, fileStream)
+    try {
+      await pipeline(networkStream, fileStream)
+    } catch (e) {
+      if (is404Error(e)) {
+        await fse.remove(file)
+      }
+
+      throw e
+    }
   }
 }

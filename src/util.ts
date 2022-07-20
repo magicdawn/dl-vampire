@@ -1,5 +1,6 @@
 import { createHash } from 'crypto'
 import fse from 'fs-extra'
+import { HTTPError } from 'got'
 
 export async function getFileHash({
   file,
@@ -25,3 +26,6 @@ export async function getFileHash({
 }
 
 export const md5 = (s: string) => createHash('md5').update(s, 'utf8').digest('hex')
+
+export const is404Error = (e?: Error) =>
+  e && e instanceof HTTPError && e.response.statusCode === 404
