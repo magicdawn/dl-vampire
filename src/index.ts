@@ -1,6 +1,6 @@
 import { dl } from './dl'
 import { Vampire } from './vampire'
-import { readUrl } from './read-url'
+import { readUrl, getReadUrlCacheFile } from './read-url'
 import { is404Error } from './util'
 
 // types
@@ -31,6 +31,7 @@ import { RetryError } from 'promise.retry'
 export {
   Vampire,
   readUrl,
+  getReadUrlCacheFile,
   dl,
   is404Error,
   RetryError,
@@ -56,6 +57,7 @@ Object.assign(module.exports, {
   default: dl,
   Vampire,
   readUrl,
+  getReadUrlCacheFile,
   is404Error,
   RetryError,
 

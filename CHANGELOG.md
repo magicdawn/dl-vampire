@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.2.0 2022-07-21
+
+- feat: readUrl, add `options.cacheDir` & `options.maxAge` support
+
 ## v1.1.0 2022-07-20
 
 - use promise.retry v1.0.0, use AbortSignal for clean up

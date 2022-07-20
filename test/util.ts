@@ -1,3 +1,4 @@
+import 'should'
 import { getFileHash } from '../src/util'
 
 describe('util', () => {
