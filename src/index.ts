@@ -26,12 +26,14 @@ import {
   CancelError,
   UploadError,
 } from 'got'
+import { RetryError } from 'promise.retry'
 
 export {
   Vampire,
   readUrl,
   dl,
   is404Error,
+  RetryError,
 
   // got
   RequestError,
@@ -55,6 +57,7 @@ Object.assign(module.exports, {
   Vampire,
   readUrl,
   is404Error,
+  RetryError,
 
   // errors
   RequestError,

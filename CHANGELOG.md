@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.1.0 2022-07-20
+
+- use promise.retry v1.0.0, use AbortSignal for clean up
+- export `pretry.RetryError`
+
 ## v1.0.1 2022-07-20
 
 - remove file when 404 error

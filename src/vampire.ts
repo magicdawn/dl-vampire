@@ -177,7 +177,7 @@ export class Vampire extends EventEmitter {
    */
   async download(
     { url, file, onprogress }: { url: string; file: string; onprogress?: OnProgress },
-    onCancel?: (cb: () => void) => void
+    signal?: AbortSignal
   ) {
     // network
     const networkStream = this.request.stream(url)
@@ -191,7 +191,7 @@ export class Vampire extends EventEmitter {
     const fileStream = fse.createWriteStream(file)
 
     // clean when cancel
-    onCancel?.(() => {
+    signal?.addEventListener('abort', () => {
       fileStream.close()
       networkStream.destroy()
     })
