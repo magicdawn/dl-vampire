@@ -8,7 +8,6 @@
     "lib",
     "package.json",
     "README.md",
-    "vampire.jpeg",
     "LICENSE"
   ],
   "scripts": {

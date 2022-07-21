@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.2.3 2022-07-21
+
+- remove vampire.jpeg from publish
+
 ## v1.2.2 2022-07-21
 
 - typescript comment improvement
