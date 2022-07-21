@@ -1,6 +1,6 @@
 {
   "name": "dl-vampire",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "download file like a vampire",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
