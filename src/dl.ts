@@ -1,6 +1,6 @@
 import assert from 'assert'
 import { HTTPError } from 'got'
-import pretry, { RetryOptions } from 'promise.retry'
+import pretry, { RetryError, RetryOptions } from 'promise.retry'
 import {
   DownloadInput,
   OnProgress,
@@ -12,9 +12,12 @@ import {
 export type DlOptions = VampireNewOptions & // new Vampire()
   DownloadInput & // file & url
   ValidateExistingFileOptions & {
-    // download extra
+    /** retry options, will pass to promise.retry {@link pretry} */
     retry?: RetryOptions
+
+    /** on download progress */
     onprogress?: OnProgress
+
     /**
      * Print detail before error thrown
      * @defaultValue `true`
@@ -62,7 +65,20 @@ export async function dl(options: DlOptions) {
         file,
         e.response.statusCode
       )
-    } else {
+    }
+    //
+    else if (e instanceof RetryError) {
+      const innerErrorType = new Set(e.errors.map((e) => e.constructor.name))
+      const innerErrorTypes = Array.from(innerErrorType).join(',')
+      console.error(
+        '[dl-vampire]: RetryError(inner %s) happens for url=%s file=%s',
+        innerErrorTypes,
+        url,
+        file
+      )
+    }
+    //
+    else {
       console.error('[dl-vampire]: error happens for url=%s file=%s', url, file)
     }
   }
@@ -85,7 +101,6 @@ export async function dl(options: DlOptions) {
 
   // tryDownload
   const tryDownload = pretry(vampire.download, retry)
-
   try {
     await tryDownload.call(vampire, { url, file, onprogress })
     return { skip: false }

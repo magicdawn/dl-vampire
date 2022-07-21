@@ -37,7 +37,13 @@ export {
   isGot404Error,
 
   // promise.retry errors
+  /**
+   * RetryError from promise.retry
+   */
   RetryError,
+  /**
+   * TimeoutError from promise.retry
+   */
   TimeoutError,
 
   // got errors
@@ -45,6 +51,10 @@ export {
   HTTPError,
   MaxRedirectsError,
   UnsupportedProtocolError,
+
+  /**
+   * got.TimeoutError re-exported as RequestTimeoutError
+   */
   RequestTimeoutError,
   ReadError,
   CacheError,

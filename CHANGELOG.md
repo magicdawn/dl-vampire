@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.2.2 2022-07-21
+
+- typescript comment improvement
+- inspectError improvement
+
 ## v1.2.1 2022-07-21
 
 - fix: `export TimeoutError = promise.retry.TimeoutError` & `export RequestTimeoutError = got.TimeoutError`

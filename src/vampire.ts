@@ -34,18 +34,35 @@ export interface VampireNewOptions {
 
 // for validating existing files
 export interface ValidateExistingFileOptions {
+  /** to skip existing valid cache file ? */
   skipExists?: boolean
+
+  /**
+   * the expected file size, if none provied, a HEAD request
+   * will be sent to get the `content-length` header as a fallback.
+   * if expectSize matchs existing local file's stat size, then consider existing file is valid
+   */
   expectSize?: number
+
+  /** the expected file hash for validating existing local file */
   expectHash?: string
+
+  /** the hash algorithm that the expectHash use */
   expectHashAlgorithm?: string
 }
 
 export interface DownloadInput {
+  /** request url */
   url: string
+  /** local file to save */
   file: string
 }
 
 export type { Progress }
+
+/**
+ * onprogress handler type
+ */
 export type OnProgress = (progress: Progress) => void
 
 export class Vampire extends EventEmitter {
