@@ -1,7 +1,7 @@
 import { dl } from './dl'
 import { Vampire } from './vampire'
 import { readUrl, getReadUrlCacheFile } from './read-url'
-import { is404Error } from './util'
+import { is404Error, isGot404Error } from './util'
 
 // types
 export type { DlOptions } from './dl'
@@ -19,14 +19,14 @@ import {
   HTTPError,
   MaxRedirectsError,
   UnsupportedProtocolError,
-  TimeoutError,
+  TimeoutError as RequestTimeoutError,
   ReadError,
   CacheError,
   ParseError,
   CancelError,
   UploadError,
 } from 'got'
-import { RetryError } from 'promise.retry'
+import { RetryError, TimeoutError } from 'promise.retry'
 
 export {
   Vampire,
@@ -34,14 +34,18 @@ export {
   getReadUrlCacheFile,
   dl,
   is404Error,
-  RetryError,
+  isGot404Error,
 
-  // got
+  // promise.retry errors
+  RetryError,
+  TimeoutError,
+
+  // got errors
   RequestError,
   HTTPError,
   MaxRedirectsError,
   UnsupportedProtocolError,
-  TimeoutError,
+  RequestTimeoutError,
   ReadError,
   CacheError,
   ParseError,
@@ -59,14 +63,18 @@ Object.assign(module.exports, {
   readUrl,
   getReadUrlCacheFile,
   is404Error,
-  RetryError,
+  isGot404Error,
 
-  // errors
+  // promise.retry errors
+  RetryError,
+  TimeoutError,
+
+  // got errors
   RequestError,
   HTTPError,
   MaxRedirectsError,
   UnsupportedProtocolError,
-  TimeoutError,
+  RequestTimeoutError,
   ReadError,
   CacheError,
   ParseError,

@@ -1,6 +1,7 @@
 import { createHash } from 'crypto'
 import fse from 'fs-extra'
 import { HTTPError } from 'got'
+import { RetryError } from 'promise.retry'
 
 export async function getFileHash({
   file,
@@ -27,5 +28,7 @@ export async function getFileHash({
 
 export const md5 = (s: string) => createHash('md5').update(s, 'utf8').digest('hex')
 
+export const isGot404Error = (e?: Error) => e instanceof HTTPError && e.response.statusCode === 404
 export const is404Error = (e?: Error) =>
-  e && e instanceof HTTPError && e.response.statusCode === 404
+  isGot404Error(e) ||
+  (e instanceof RetryError && e.errors.every((childError) => isGot404Error(childError)))

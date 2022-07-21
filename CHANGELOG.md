@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.2.1 2022-07-21
+
+- fix: `export TimeoutError = promise.retry.TimeoutError` & `export RequestTimeoutError = got.TimeoutError`
+
 ## v1.2.0 2022-07-21
 
 - feat: readUrl, add `options.cacheDir` & `options.maxAge` support
