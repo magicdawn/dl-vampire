@@ -30,6 +30,7 @@ export async function dl(options: DlOptions) {
     // VampireNewOptions
     useChromeUa,
     requestOptions,
+    useProxyEnv,
 
     // DownloadInput
     url,
@@ -53,6 +54,7 @@ export async function dl(options: DlOptions) {
   const vampire = new Vampire({
     useChromeUa,
     requestOptions,
+    useProxyEnv,
   })
 
   const tryInspectError = (e?: Error) => {

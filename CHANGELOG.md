@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.3.1 2022-07-29
+
+- fix `useProxyEnv` option not working
+
 ## v1.3.0 2022-07-29
 
 - use hpagent instead of proxy-agent. for a `ECONNRESET` bug caused by proxy-agent. and I can't dig into this, so replace this.
