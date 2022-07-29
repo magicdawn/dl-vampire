@@ -2,9 +2,9 @@ import debugFactory from 'debug'
 import EventEmitter from 'events'
 import fse from 'fs-extra'
 import got, { Got, Options, Progress } from 'got'
+import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
 import _ from 'lodash'
 import path from 'path'
-import ProxyAgent from 'proxy-agent'
 import { pipeline } from 'stream/promises'
 import { getFileHash, is404Error } from './util'
 
@@ -21,7 +21,7 @@ export interface VampireNewOptions {
   useChromeUa?: boolean
 
   /**
-   * use http_proxy / https_proxy / all_proxy environment variables, see {@link https://npm.im/proxy-agent ProxyAgent}
+   * use http_proxy / https_proxy environment variables, see {@link https://npm.im/hpagent HttpProxyAgent & HttpsProxyAgent}
    * @defaultValue `true`
    */
   useProxyEnv?: boolean
@@ -85,6 +85,8 @@ export class Vampire extends EventEmitter {
   }
 
   request: Got
+  httpAgent: HttpProxyAgent | undefined
+  httpsAgent: HttpsProxyAgent | undefined
 
   config(options: VampireNewOptions) {
     const instance = this.request
@@ -105,11 +107,18 @@ export class Vampire extends EventEmitter {
 
     // use http_proxy / https_proxy / all_proxy env
     if (useProxyEnv) {
-      const agent = new ProxyAgent()
+      const httpProxy = process.env.http_proxy
+      const httpsProxy = process.env.https_proxy || httpProxy
+
+      const httpAgent = httpProxy ? new HttpProxyAgent({ proxy: httpProxy }) : undefined
+      const httpsAgent = httpsProxy ? new HttpsProxyAgent({ proxy: httpsProxy }) : undefined
+      this.httpAgent = httpAgent
+      this.httpsAgent = httpsAgent
+
       update({
         agent: {
-          http: agent,
-          https: agent,
+          http: httpAgent,
+          https: httpsAgent,
         },
       })
     }

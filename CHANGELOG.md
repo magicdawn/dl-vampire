@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.3.0 2022-07-29
+
+- use hpagent instead of proxy-agent. for a `ECONNRESET` bug caused by proxy-agent. and I can't dig into this, so replace this.
+
 ## v1.2.3 2022-07-21
 
 - remove vampire.jpeg from publish
