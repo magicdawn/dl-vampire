@@ -2,7 +2,7 @@
 
 > download file like a vampire
 
-[![Build Status](https://img.shields.io/travis/magicdawn/dl-vampire.svg?style=flat-square)](https://travis-ci.org/magicdawn/dl-vampire)
+[![Build Status](https://img.shields.io/github/workflow/status/magicdawn/dl-vampire/ci/master.svg?style=flat-square)](https://github.com/magicdawn/dl-vampire/actions/workflows/ci.yml)
 [![Coverage Status](https://img.shields.io/codecov/c/github/magicdawn/dl-vampire.svg?style=flat-square)](https://codecov.io/gh/magicdawn/dl-vampire)
 [![npm version](https://img.shields.io/npm/v/dl-vampire.svg?style=flat-square)](https://www.npmjs.com/package/dl-vampire)
 [![npm downloads](https://img.shields.io/npm/dm/dl-vampire.svg?style=flat-square)](https://www.npmjs.com/package/dl-vampire)
