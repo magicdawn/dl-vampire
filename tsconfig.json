@@ -13,7 +13,6 @@
     "declaration": true
   },
   "ts-node": {
-    "transpileOnly": true,
     "swc": true
   }
 }
