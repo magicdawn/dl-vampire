@@ -82,7 +82,8 @@ export class Vampire extends EventEmitter {
       // Error: The `onCancel` handler was attached after the promise settled.
       // https://github.com/sindresorhus/got/issues/1489#issuecomment-1318617918
       // consider disable got retry options
-      retry: 0,
+      // new ver v11.8.6 fix this
+      // retry: 0,
     })
 
     // got options
@@ -157,14 +158,14 @@ export class Vampire extends EventEmitter {
   /**
    * 是否有需要下载一个文件
    */
-  async needDownload({
+  needDownload = async ({
     url,
     file,
     skipExists = true,
     expectSize,
     expectHash,
     expectHashAlgorithm = 'md5',
-  }: DownloadInput & ValidateExistingFileOptions) {
+  }: DownloadInput & ValidateExistingFileOptions) => {
     // 不跳过, 下载
     if (!skipExists) return true
 
@@ -206,10 +207,10 @@ export class Vampire extends EventEmitter {
   /**
    * 下载一个文件
    */
-  async download(
+  download = async (
     { url, file, onprogress }: { url: string; file: string; onprogress?: OnProgress },
     signal?: AbortSignal
-  ) {
+  ) => {
     // network
     const networkStream = this.request.stream(url)
     if (onprogress) {

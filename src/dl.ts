@@ -85,9 +85,10 @@ export async function dl(options: DlOptions) {
     }
   }
 
-  // no need
+  // check need download
+  const tryNeedDownload = pretry(vampire.needDownload, retry)
   try {
-    const need = await vampire.needDownload({
+    const need = await tryNeedDownload({
       url,
       file,
       skipExists,
@@ -104,7 +105,7 @@ export async function dl(options: DlOptions) {
   // tryDownload
   const tryDownload = pretry(vampire.download, retry)
   try {
-    await tryDownload.call(vampire, { url, file, onprogress })
+    await tryDownload({ url, file, onprogress })
     return { skip: false }
   } catch (e) {
     tryInspectError(e)

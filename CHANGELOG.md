@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.4.0 2022-12-12
+
+- fix: update got & revert previous `got.retry = 0` change, since new got fix this
+- fix: pretry for needDownload too
+
 ## v1.3.3 2022-12-12
 
 - fix: disable got internal retry logic to prevent error like https://github.com/sindresorhus/got/issues/1489#issuecomment-1318617918
