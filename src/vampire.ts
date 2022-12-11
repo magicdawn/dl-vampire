@@ -78,6 +78,11 @@ export class Vampire extends EventEmitter {
     // request
     this.request = got.extend({
       mutableDefaults: true,
+
+      // Error: The `onCancel` handler was attached after the promise settled.
+      // https://github.com/sindresorhus/got/issues/1489#issuecomment-1318617918
+      // consider disable got retry options
+      retry: 0,
     })
 
     // got options
