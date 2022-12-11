@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.3.3 2022-12-12
+
+- fix: disable got internal retry logic to prevent error like https://github.com/sindresorhus/got/issues/1489#issuecomment-1318617918
+
 ## v1.3.2 2022-12-12
 
 - fix: `module.exports.dl` usage
