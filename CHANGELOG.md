@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.3.2 2022-12-12
+
+- fix: `module.exports.dl` usage
+
 ## v1.3.1 2022-07-29
 
 - fix `useProxyEnv` option not working
