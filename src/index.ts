@@ -69,6 +69,7 @@ module.exports = dl
 Object.assign(module.exports, {
   __esModule: true,
   default: dl,
+  dl,
   Vampire,
   readUrl,
   getReadUrlCacheFile,
