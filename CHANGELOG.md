@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.4.1 2023-05-21
+
+- cd33ea5 fix fs types
+- 03ad88a chore: update deps
+
 ## v1.4.0 2022-12-12
 
 - fix: update got & revert previous `got.retry = 0` change, since new got fix this
