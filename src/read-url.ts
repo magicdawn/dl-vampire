@@ -21,7 +21,7 @@ export type ReadUrlOptions = Omit<DlOptions, 'file'> & {
 }
 
 export type ReadUrlOptionsWithEncoding = ReadUrlOptions & {
-  encoding: string
+  encoding: BufferEncoding
 }
 
 export async function readUrl(opts: ReadUrlOptions): Promise<Buffer>
@@ -57,9 +57,9 @@ export async function readUrl(
   }
 
   if ('encoding' in options && options.encoding) {
-    return fse.readFile(options.file, options.encoding)
+    return await fse.readFile(options.file, options.encoding)
   } else {
-    return fse.readFile(options.file)
+    return await fse.readFile(options.file)
   }
 }
 
