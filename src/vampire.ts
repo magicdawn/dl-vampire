@@ -1,17 +1,17 @@
-import debugFactory from 'debug'
 import EventEmitter from 'events'
 import fse from 'fs-extra'
 import got, { Got, Options, Progress } from 'got'
-import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
 import _ from 'lodash'
 import path from 'path'
+import { ProxyAgent } from 'proxy-agent'
 import { pipeline } from 'stream/promises'
+import { baseDebug } from './common'
 import { getFileHash, is404Error } from './util'
 
-const debug = debugFactory('dl-vampire:vampire')
+const debug = baseDebug.extend('vampire')
 
 const CHROME_UA =
-  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.99 Safari/537.36'
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
 
 export interface VampireNewOptions {
   /**
@@ -21,7 +21,7 @@ export interface VampireNewOptions {
   useChromeUa?: boolean
 
   /**
-   * use http_proxy / https_proxy environment variables, see {@link https://npm.im/hpagent HttpProxyAgent & HttpsProxyAgent}
+   * use http_proxy / https_proxy environment variables, see {@link https://npm.im/proxy-agent}
    * @defaultValue `true`
    */
   useProxyEnv?: boolean
@@ -91,8 +91,7 @@ export class Vampire extends EventEmitter {
   }
 
   request: Got
-  httpAgent: HttpProxyAgent | undefined
-  httpsAgent: HttpsProxyAgent | undefined
+  proxyAgent: ProxyAgent | undefined
 
   config(options: VampireNewOptions) {
     const instance = this.request
@@ -113,18 +112,11 @@ export class Vampire extends EventEmitter {
 
     // use http_proxy / https_proxy / all_proxy env
     if (useProxyEnv) {
-      const httpProxy = process.env.http_proxy
-      const httpsProxy = process.env.https_proxy || httpProxy
-
-      const httpAgent = httpProxy ? new HttpProxyAgent({ proxy: httpProxy }) : undefined
-      const httpsAgent = httpsProxy ? new HttpsProxyAgent({ proxy: httpsProxy }) : undefined
-      this.httpAgent = httpAgent
-      this.httpsAgent = httpsAgent
-
+      const agent = (this.proxyAgent = new ProxyAgent())
       update({
         agent: {
-          http: httpAgent,
-          https: httpsAgent,
+          http: agent,
+          https: agent,
         },
       })
     }

@@ -1,8 +1,7 @@
-import { stat, statSync } from 'fs-extra'
+import { stat } from 'fs-extra'
 import path from 'path'
 import { readUrl } from '../src'
 import { getReadUrlCacheFile } from '../src/read-url'
-import { md5 } from '../src/util'
 
 const BAIDU_URL = 'https://www.baidu.com'
 const cacheDir = __dirname + '/read-url-cache'
