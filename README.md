@@ -26,8 +26,7 @@ $ npm i dl-vampire --save
 ## API
 
 ```js
-const dl = require('dl-vampire')
-const { Vamipre, readUrl } = dl
+import dl, { Vampire, readUrl } from 'dl-vampire'
 ```
 
 ### `dl(options: DlOptions) => Promise<{skip: boolean}>`
