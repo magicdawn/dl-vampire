@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v2.0.0 2023-10-17
+
+- ESM only, and bundled with tsup, and move back to proxy-agent
+
 ## v1.4.1 2023-05-21
 
 - cd33ea5 fix fs types
