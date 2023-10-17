@@ -1,6 +1,6 @@
 {
   "name": "dl-vampire",
-  "version": "1.4.1",
+  "version": "2.0.0",
   "description": "download file like a vampire",
   "type": "module",
   "main": "dist/index.js",
