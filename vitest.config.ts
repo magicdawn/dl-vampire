@@ -5,5 +5,6 @@ export default defineConfig({
     globals: true,
     include: ['./test/**/*.test.ts'],
     setupFiles: ['./test/setup.ts'],
+    testTimeout: process.env.CI ? 10000 : 2000,
   },
 })
