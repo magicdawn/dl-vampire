@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
 import fse from 'fs-extra'
-import got, { Got, Options, Progress } from 'got'
+import got, { Got, OptionsInit, Progress } from 'got'
 import _ from 'lodash'
 import path from 'path'
 import { ProxyAgent } from 'proxy-agent'
@@ -29,7 +29,7 @@ export interface VampireNewOptions {
   /**
    * more got options
    */
-  requestOptions?: Options
+  requestOptions?: OptionsInit
 }
 
 // for validating existing files
@@ -97,8 +97,8 @@ export class Vampire extends EventEmitter {
     const instance = this.request
     const { useChromeUa, useProxyEnv, requestOptions } = options
 
-    const update = (obj: Options) => {
-      instance.defaults.options = got.mergeOptions(instance.defaults.options, obj)
+    const update = (obj: OptionsInit) => {
+      instance.defaults.options.merge(obj)
     }
 
     // use chrome user agent

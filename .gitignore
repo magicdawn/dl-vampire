@@ -14,5 +14,6 @@ coverage.*
 # ts
 **/*.tsbuildinfo
 /lib
+/dist
 
 read-url-cache/

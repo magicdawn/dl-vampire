@@ -1,16 +1,15 @@
 {
-  "include": ["src/**/*"],
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "lib",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
     "resolveJsonModule": true,
-    "target": "es2019",
-    "module": "CommonJS",
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
     "strictNullChecks": true,
-    "declaration": true
+    "declaration": true,
+    "skipLibCheck": true,
+		"types": ["vitest/globals"]
   },
   "ts-node": {
     "swc": true
