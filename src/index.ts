@@ -1,4 +1,4 @@
-export { dl as default, dl } from './dl'
+export { dl as default, dl, inspectError } from './dl'
 export { getReadUrlCacheFile, readUrl } from './read-url'
 export { is404Error, isGot404Error } from './util'
 export { Vampire } from './vampire'

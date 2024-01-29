@@ -45,7 +45,7 @@ export async function dl(options: DlOptions) {
     // download extra
     retry = { times: 5 } as RetryOptions,
     onprogress,
-    inspectError = true,
+    inspectError: inspectErrorFlag = true,
   } = options
 
   assert(url, 'options.url can not be empty')
@@ -57,32 +57,9 @@ export async function dl(options: DlOptions) {
     useProxyEnv,
   })
 
-  const tryInspectError = (e?: Error) => {
-    if (!inspectError || !e) return
-
-    if (e instanceof HTTPError) {
-      console.error(
-        '[dl-vampire]: HTTPError happens for url=%s file=%s statusCode=%s',
-        url,
-        file,
-        e.response.statusCode
-      )
-    }
-    //
-    else if (e instanceof RetryError) {
-      const innerErrorType = new Set(e.errors.map((e) => e.constructor.name))
-      const innerErrorTypes = Array.from(innerErrorType).join(',')
-      console.error(
-        '[dl-vampire]: RetryError(inner %s) happens for url=%s file=%s',
-        innerErrorTypes,
-        url,
-        file
-      )
-    }
-    //
-    else {
-      console.error('[dl-vampire]: error happens for url=%s file=%s', url, file)
-    }
+  const callInspectError = (e?: Error) => {
+    if (!inspectErrorFlag || !e) return
+    inspectError(e, { url, file })
   }
 
   // check need download
@@ -98,7 +75,7 @@ export async function dl(options: DlOptions) {
     })
     if (!need) return { skip: true }
   } catch (e) {
-    tryInspectError(e)
+    callInspectError(e)
     throw e
   }
 
@@ -108,7 +85,36 @@ export async function dl(options: DlOptions) {
     await tryDownload({ url, file, onprogress })
     return { skip: false }
   } catch (e) {
-    tryInspectError(e)
+    callInspectError(e)
     throw e
+  }
+}
+
+export function inspectError(e: Error | undefined, { url, file }: Pick<DlOptions, 'url' | 'file'>) {
+  if (e instanceof HTTPError) {
+    console.error(
+      '[dl-vampire]: HTTPError happens for url=%s file=%s statusCode=%s',
+      url,
+      file,
+      e.response.statusCode,
+    )
+  }
+  //
+  else if (e instanceof RetryError) {
+    const innerErrorTypes = Array.from(new Set(e.errors.map((e) => e.constructor.name))).join(',')
+    const innerStatusCodes = Array.from(
+      new Set(e.errors.map((e) => e instanceof HTTPError && e.message).filter(Boolean)),
+    ).join(',')
+    console.error(
+      '[dl-vampire]: RetryError(inner errorType:%s statusCodes:%s) happens for url=%s file=%s',
+      innerErrorTypes,
+      innerStatusCodes,
+      url,
+      file,
+    )
+  }
+  //
+  else {
+    console.error('[dl-vampire]: error happens for url=%s file=%s', url, file)
   }
 }
