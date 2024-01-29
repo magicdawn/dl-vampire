@@ -1,11 +1,11 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import dl, { Progress } from '../src'
+import dl, { Progress, inspectError } from '../src'
 
 const url = 'https://www.baidu.com/img/bd_logo1.png'
-const file = __dirname + '/../example-files/bd_logo1.dl.png'
+const file = import.meta.dirname + '/../example-files/bd_logo1.dl.png'
 
-describe('download', function () {
+describe('.dl', function () {
   it('download works', async function () {
     const ret = await dl({
       url,
@@ -44,5 +44,29 @@ describe('download', function () {
     // ps
     ps.length.should.above(0)
     _.last(ps)!.percent.should.equal(1)
+  })
+})
+
+describe('.inspectError', () => {
+  it('.inspectError works', async () => {
+    let err: Error | undefined
+    const url = 'https://www.baidu.com/1'
+    const file = import.meta.dirname + '/../example-files/not-found.txt'
+    try {
+      const x = await dl({
+        url,
+        file,
+        inspectError: false,
+        retry: {
+          times: 3,
+          timeout: 3_000,
+        },
+      })
+    } catch (e) {
+      err = e
+    }
+
+    err!.should.exist
+    inspectError(err, { url, file })
   })
 })

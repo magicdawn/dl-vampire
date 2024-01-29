@@ -102,13 +102,11 @@ export function inspectError(e: Error | undefined, { url, file }: Pick<DlOptions
   //
   else if (e instanceof RetryError) {
     const innerErrorTypes = Array.from(new Set(e.errors.map((e) => e.constructor.name))).join(',')
-    const innerStatusCodes = Array.from(
-      new Set(e.errors.map((e) => e instanceof HTTPError && e.message).filter(Boolean)),
+    const statusCodes = Array.from(
+      new Set(e.errors.map((e) => e instanceof HTTPError && e.response.statusCode).filter(Boolean)),
     ).join(',')
     console.error(
-      '[dl-vampire]: RetryError(inner errorType:%s statusCodes:%s) happens for url=%s file=%s',
-      innerErrorTypes,
-      innerStatusCodes,
+      `[dl-vampire]: RetryError(inner errorType:${innerErrorTypes} statusCodes:${statusCodes}) happens for url=%s file=%s`,
       url,
       file,
     )

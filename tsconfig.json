@@ -9,7 +9,7 @@
     "strictNullChecks": true,
     "declaration": true,
     "skipLibCheck": true,
-		"types": ["vitest/globals"]
+		"types": ["vitest/globals", "chai"]
   },
   "ts-node": {
     "swc": true
