@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v2.1.0 2024-01-29
+
+- add `.inspectError` method export
+- report `HTTPError.statusCode` too
+- fix code coverage
+
 ## v2.0.0 2023-10-17
 
 - ESM only, and bundled with tsup, and move back to proxy-agent
