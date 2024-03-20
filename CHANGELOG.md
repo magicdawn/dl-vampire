@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v2.1.1 2024-03-20
+
+- use named export of `EventEmitter` to fix [#6](https://github.com/magicdawn/dl-vampire/issues/6)
+
 ## v2.1.0 2024-01-29
 
 - add `.inspectError` method export
