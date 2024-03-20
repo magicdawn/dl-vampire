@@ -1,4 +1,4 @@
-import EventEmitter from 'events'
+import { EventEmitter } from 'events'
 import fse from 'fs-extra'
 import got, { Got, OptionsInit, Progress } from 'got'
 import _ from 'lodash'
@@ -201,7 +201,7 @@ export class Vampire extends EventEmitter {
    */
   download = async (
     { url, file, onprogress }: { url: string; file: string; onprogress?: OnProgress },
-    signal?: AbortSignal
+    signal?: AbortSignal,
   ) => {
     // network
     const networkStream = this.request.stream(url)
