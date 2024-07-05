@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events'
 import fse from 'fs-extra'
 import got, { Got, OptionsInit, Progress } from 'got'
-import _ from 'lodash'
 import path from 'path'
 import { ProxyAgent } from 'proxy-agent'
 import { pipeline } from 'stream/promises'
@@ -49,6 +48,12 @@ export interface ValidateExistingFileOptions {
 
   /** the hash algorithm that the expectHash use */
   expectHashAlgorithm?: string
+
+  /**
+   * if expectSize not provided, a HEAD request will be sent to get the `content-length` as expectSize
+   * @defaultValue `true`
+   */
+  useHeadRequestToFetchExpectSize?: boolean
 }
 
 export interface DownloadInput {
@@ -69,11 +74,12 @@ export class Vampire extends EventEmitter {
   constructor(options?: VampireNewOptions) {
     super()
 
-    options = _.defaults(options, {
+    options = {
       useChromeUa: true,
       useProxyEnv: true,
       requestOptions: {},
-    } as VampireNewOptions)
+      ...options,
+    }
 
     // request
     this.request = got.extend({
@@ -157,36 +163,47 @@ export class Vampire extends EventEmitter {
     expectSize,
     expectHash,
     expectHashAlgorithm = 'md5',
+    useHeadRequestToFetchExpectSize = true,
   }: DownloadInput & ValidateExistingFileOptions) => {
     // 不跳过, 下载
     if (!skipExists) return true
 
     // if not exists, go to download
-    const exists = await fse.pathExists(file)
-    if (!exists) return true
+    if (!(await fse.exists(file))) return true
 
     // hash check
-    if (expectHash) {
+    if (expectHash && expectHashAlgorithm) {
       const hash = await getFileHash({ file, alg: expectHashAlgorithm })
       if (hash !== expectHash) {
-        debug('needDownload: true, hash = %s & expectHash = %s', hash, expectHash)
+        debug(
+          'needDownload for hash mismatch: alg=%s actual(%s) != expect(%s)',
+          expectHashAlgorithm,
+          hash,
+          expectHash,
+        )
         return true
       }
     }
 
-    // get content-length as expectSize
-    if (!expectSize) {
-      // if met HTTPError, just throw
-      expectSize = await this.getSize(url)
-
-      // no size
-      // goto download
-      if (!expectSize) return true
-    }
-
-    // check localSize & content-length
+    // size check
     const stat = await fse.stat(file)
     const localSize = stat.size
+    if (localSize === 0) {
+      debug('needDownload for local file invalid, stat.size = 0')
+      return true
+    }
+
+    // get content-length as expectSize
+    if (!expectSize && useHeadRequestToFetchExpectSize) {
+      // if met HTTPError, just throw
+      expectSize = await this.getSize(url)
+    }
+
+    // no size, goto download
+    if (!expectSize) {
+      return true
+    }
+
     if (localSize !== expectSize) {
       debug('needDownload: true, localSize = %s & expectSize = %s', localSize, expectSize)
       return true

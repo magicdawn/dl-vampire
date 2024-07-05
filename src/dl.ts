@@ -1,6 +1,6 @@
 import assert from 'assert'
 import { HTTPError } from 'got'
-import pretry, { RetryError, RetryOptions } from 'promise.retry'
+import pretry, { RetryError, type RetryOptions } from 'promise.retry'
 import {
   DownloadInput,
   OnProgress,
@@ -41,6 +41,7 @@ export async function dl(options: DlOptions) {
     expectSize,
     expectHash,
     expectHashAlgorithm = 'md5',
+    useHeadRequestToFetchExpectSize = true,
 
     // download extra
     retry = { times: 5 } as RetryOptions,
@@ -72,6 +73,7 @@ export async function dl(options: DlOptions) {
       expectSize,
       expectHash,
       expectHashAlgorithm,
+      useHeadRequestToFetchExpectSize,
     })
     if (!need) return { skip: true }
   } catch (e) {

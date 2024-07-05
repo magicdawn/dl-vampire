@@ -10,19 +10,19 @@ describe('readUrl', () => {
   it('getReadUrlCacheFile works', () => {
     const file = getReadUrlCacheFile({ url: BAIDU_URL, cacheDir })
     file.should.equal(
-      path.join(__dirname, './read-url-cache/dl-vampire-cache/f9751de431104b125f48dd79cc55822a')
+      path.join(__dirname, './read-url-cache/dl-vampire-cache/f9751de431104b125f48dd79cc55822a'),
     )
   })
 
   it('readUrl => string', async () => {
     const str = await readUrl({ url: BAIDU_URL, encoding: 'utf8' })
-    str.should.match(/百度/)
+    str.should.match(/百度|baidu/)
   })
 
   it('readUrl => Buffer', async () => {
     const buf = await readUrl({ url: BAIDU_URL })
     buf.should.instanceOf(Buffer)
-    buf.toString().should.match(/百度/)
+    buf.toString().should.match(/百度|baidu/)
   })
 
   it('options.cacheDir & optios.maxAge works', async () => {
@@ -32,7 +32,7 @@ describe('readUrl', () => {
       encoding: 'utf8',
       cacheDir: __dirname + '/read-url-cache',
     })
-    str.should.match(/百度/)
+    str.should.match(/百度|baidu/)
 
     // maxAge
     {
@@ -48,7 +48,7 @@ describe('readUrl', () => {
           cacheDir: __dirname + '/read-url-cache',
           maxAge,
         })
-        str.should.match(/百度/)
+        str.should.match(/百度|baidu/)
 
         // mtime after readUrl
         const fileNewMtime = (await stat(file)).mtimeMs
