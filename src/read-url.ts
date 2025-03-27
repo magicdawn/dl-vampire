@@ -27,7 +27,7 @@ export type ReadUrlOptionsWithEncoding = ReadUrlOptions & {
 export async function readUrl(opts: ReadUrlOptions): Promise<Buffer>
 export async function readUrl(opts: ReadUrlOptionsWithEncoding): Promise<string>
 export async function readUrl(
-  opts: ReadUrlOptions | ReadUrlOptionsWithEncoding
+  opts: ReadUrlOptions | ReadUrlOptionsWithEncoding,
 ): Promise<string | Buffer> {
   const options = { ...opts }
   assert(options.url, 'options.url is required')
@@ -44,7 +44,8 @@ export async function readUrl(
     const stat = await fse.stat(file)
     const age = Date.now() - stat.mtimeMs
 
-    const maxAgeMs = typeof options.maxAge === 'number' ? options.maxAge : ms(options.maxAge)
+    const maxAgeMs =
+      typeof options.maxAge === 'number' ? options.maxAge : ms(options.maxAge as ms.StringValue)
     return age <= maxAgeMs
   }
 

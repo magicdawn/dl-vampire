@@ -19,7 +19,8 @@
     "test-cover": "vitest --run --coverage",
     "build": "tsup",
     "prepublishOnly": "npm run build",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
