@@ -237,14 +237,21 @@ export class Vampire extends EventEmitter {
       networkStream.destroy()
     })
 
+    let err: any
     try {
       await pipeline(networkStream, fileStream)
     } catch (e) {
-      if (is404Error(e)) {
+      err = e
+    }
+
+    if (err) {
+      if (is404Error(err)) {
         await fse.remove(file)
       }
-
-      throw e
+      if ((await fse.exists(file)) && (await fse.stat(file)).size === 0) {
+        await fse.remove(file)
+      }
+      throw err
     }
   }
 }
