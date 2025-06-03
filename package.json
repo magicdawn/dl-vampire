@@ -39,7 +39,7 @@
     "test:dev": "vitest",
     "test-cover": "vitest --run --coverage",
     "build": "tsup",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "pnpm test && pnpm build",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit"
   },
