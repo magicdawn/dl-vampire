@@ -99,7 +99,7 @@ export function inspectError(e: Error | undefined, { url, file }: Pick<DlOptions
     const errorCodes = new Set(
       e.errors.map((e) => (e instanceof RequestError && !(e instanceof HTTPError) ? e.code : undefined)).filter(Boolean),
     )
-    console.error(
+    return console.error(
       `[dl-vampire]: RetryError(inner errorType:%o  HTTPError.statusCode:%o  RequestError.code:%o) happens for url=%s file=%s`,
       innerErrorTypes,
       statusCodes,

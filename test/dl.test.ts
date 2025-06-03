@@ -5,7 +5,7 @@ const url = 'https://www.baidu.com/img/bd_logo1.png'
 const file = `${import.meta.dirname}/../example-files/bd_logo1.dl.png`
 
 describe('.dl', function () {
-  it.only('download works', async function () {
+  it('download works', async function () {
     const ret = await dl({
       url,
       file,
