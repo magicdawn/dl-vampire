@@ -1,19 +1,40 @@
 {
   "name": "dl-vampire",
   "version": "2.1.4",
+  "packageManager": "pnpm@10.11.1+sha512.e519b9f7639869dc8d5c3c5dfef73b3f091094b0a006d7317353c72b124e80e1afd429732e28705ad6bfa1ee879c1fce46c128ccebd3192101f43dd67c667912",
   "description": "download file like a vampire",
   "type": "module",
+  "keywords": [
+    "dl",
+    "download",
+    "fs",
+    "vampire",
+    "download-manager"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/magicdawn/dl-vampire#readme",
+  "bugs": {
+    "url": "https://github.com/magicdawn/dl-vampire/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/magicdawn/dl-vampire.git"
+  },
+  "author": "magicdawn",
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "dist/",
+    "package.json"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist/",
-    "package.json",
-    "README.md",
-    "CHANGELOG.md",
-    "LICENSE"
-  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky",
     "test": "vitest --run",
     "test:dev": "vitest",
     "test-cover": "vitest --run --coverage",
@@ -22,25 +43,8 @@
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/magicdawn/dl-vampire.git"
-  },
-  "keywords": [
-    "dl",
-    "download",
-    "fs",
-    "vampire",
-    "download-manager"
-  ],
-  "author": "magicdawn",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/magicdawn/dl-vampire/issues"
-  },
-  "homepage": "https://github.com/magicdawn/dl-vampire#readme",
   "dependencies": {
-    "debug": "^4.4.0",
+    "debug": "^4.4.1",
     "fs-extra": "^11.3.0",
     "got": "^14.4.7",
     "lodash": "^4.17.21",
@@ -49,30 +53,30 @@
     "proxy-agent": "^6.5.0"
   },
   "devDependencies": {
-    "@magicdawn/eslint-config": "^0.1.0",
-    "@magicdawn/prettier-config": "^0.0.4",
-    "@types/chai": "^5.2.1",
+    "@magicdawn/eslint-config": "^1.5.3",
+    "@magicdawn/prettier-config": "^0.1.0",
+    "@types/chai": "^5.2.2",
     "@types/debug": "^4.1.12",
     "@types/fs-extra": "^11.0.4",
-    "@types/lodash": "^4.17.16",
+    "@types/lodash": "^4.17.17",
     "@types/ms": "^2.1.0",
-    "@types/node": "^22.14.0",
-    "@vitest/coverage-v8": "^3.1.1",
-    "eslint": "^9.24.0",
+    "@types/node": "^22.15.29",
+    "@vitest/coverage-v8": "^3.2.0",
+    "eslint": "^9.28.0",
     "husky": "^9.1.7",
-    "lint-staged": "^15",
+    "lint-staged": "^16",
     "prettier": "^3.5.3",
-    "tsup": "^8.4.0",
+    "tsup": "^8.5.0",
     "typescript": "^5.8.3",
-    "vitest": "^3.1.1"
+    "vitest": "^3.2.0"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx,md}": [
+    "*.{?(c|m)(j|t)s?(x),json,y?(a)ml}": [
+      "eslint --fix",
       "prettier --write"
+    ],
+    "!*.{?(c|m)(j|t)s?(x),json,y?(a)ml}": [
+      "prettier --write --ignore-unknown"
     ]
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org"
-  },
-  "packageManager": "pnpm@10.8.0+sha512.0e82714d1b5b43c74610193cb20734897c1d00de89d0e18420aebc5977fa13d780a9cb05734624e81ebd81cc876cd464794850641c48b9544326b5622ca29971"
+  }
 }

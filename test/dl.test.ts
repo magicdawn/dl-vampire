@@ -1,9 +1,8 @@
 import fs from 'fs-extra'
-import _ from 'lodash'
-import dl, { Progress, inspectError } from '../src'
+import dl, { inspectError, type Progress } from '../src'
 
 const url = 'https://www.baidu.com/img/bd_logo1.png'
-const file = import.meta.dirname + '/../example-files/bd_logo1.dl.png'
+const file = `${import.meta.dirname}/../example-files/bd_logo1.dl.png`
 
 describe('.dl', function () {
   it('download works', async function () {
@@ -43,7 +42,7 @@ describe('.dl', function () {
 
     // ps
     ps.length.should.above(0)
-    _.last(ps)!.percent.should.equal(1)
+    ps.at(-1)!.percent.should.equal(1)
   })
 })
 
@@ -51,7 +50,7 @@ describe('.inspectError', () => {
   it('.inspectError works', async () => {
     let err: Error | undefined
     const url = 'https://www.baidu.com/1'
-    const file = import.meta.dirname + '/../example-files/not-found.txt'
+    const file = `${import.meta.dirname}/../example-files/not-found.txt`
     try {
       const x = await dl({
         url,

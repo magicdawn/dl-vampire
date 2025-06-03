@@ -1,12 +1,12 @@
-import assert from 'assert'
+import assert from 'node:assert'
 import { HTTPError } from 'got'
 import pretry, { RetryError, type RetryOptions } from 'promise.retry'
 import {
-  DownloadInput,
-  OnProgress,
-  ValidateExistingFileOptions,
   Vampire,
-  VampireNewOptions,
+  type DownloadInput,
+  type OnProgress,
+  type ValidateExistingFileOptions,
+  type VampireNewOptions,
 } from './vampire'
 
 export type DlOptions = VampireNewOptions & // new Vampire()
@@ -94,19 +94,12 @@ export async function dl(options: DlOptions) {
 
 export function inspectError(e: Error | undefined, { url, file }: Pick<DlOptions, 'url' | 'file'>) {
   if (e instanceof HTTPError) {
-    console.error(
-      '[dl-vampire]: HTTPError happens for url=%s file=%s statusCode=%s',
-      url,
-      file,
-      e.response.statusCode,
-    )
+    console.error('[dl-vampire]: HTTPError happens for url=%s file=%s statusCode=%s', url, file, e.response.statusCode)
   }
   //
   else if (e instanceof RetryError) {
     const innerErrorTypes = new Set(e.errors.map((e) => e.constructor.name))
-    const statusCodes = new Set(
-      e.errors.map((e) => e instanceof HTTPError && e.response.statusCode).filter(Boolean),
-    )
+    const statusCodes = new Set(e.errors.map((e) => e instanceof HTTPError && e.response.statusCode).filter(Boolean))
     console.error(
       `[dl-vampire]: RetryError(inner errorType:%o statusCodes:%o happens for url=%s file=%s`,
       innerErrorTypes,

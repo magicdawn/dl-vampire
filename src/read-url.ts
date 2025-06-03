@@ -1,10 +1,10 @@
-import assert from 'assert'
+import assert from 'node:assert'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import fse from 'fs-extra'
 import ms from 'ms'
-import { tmpdir } from 'os'
-import { join } from 'path'
 import { baseDebug } from './common'
-import { dl, DlOptions } from './dl'
+import { dl, type DlOptions } from './dl'
 import { md5 } from './util'
 
 const debug = baseDebug.extend('read-url')
@@ -26,15 +26,12 @@ export type ReadUrlOptionsWithEncoding = ReadUrlOptions & {
 
 export async function readUrl(opts: ReadUrlOptions): Promise<Buffer>
 export async function readUrl(opts: ReadUrlOptionsWithEncoding): Promise<string>
-export async function readUrl(
-  opts: ReadUrlOptions | ReadUrlOptionsWithEncoding,
-): Promise<string | Buffer> {
+export async function readUrl(opts: ReadUrlOptions | ReadUrlOptionsWithEncoding): Promise<string | Buffer> {
   const options = { ...opts }
   assert(options.url, 'options.url is required')
 
   // a consistent temp file
-  options.file =
-    options.file || getReadUrlCacheFile({ url: options.url, cacheDir: options.cacheDir })
+  options.file = options.file || getReadUrlCacheFile({ url: options.url, cacheDir: options.cacheDir })
   debug('using file = %s', options.file)
 
   const isCacheValid = async () => {
@@ -44,8 +41,7 @@ export async function readUrl(
     const stat = await fse.stat(file)
     const age = Date.now() - stat.mtimeMs
 
-    const maxAgeMs =
-      typeof options.maxAge === 'number' ? options.maxAge : ms(options.maxAge as ms.StringValue)
+    const maxAgeMs = typeof options.maxAge === 'number' ? options.maxAge : ms(options.maxAge as ms.StringValue)
     return age <= maxAgeMs
   }
 

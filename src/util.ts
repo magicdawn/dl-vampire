@@ -1,15 +1,9 @@
-import { createHash } from 'crypto'
+import { createHash } from 'node:crypto'
 import fse from 'fs-extra'
 import { HTTPError } from 'got'
 import { RetryError } from 'promise.retry'
 
-export async function getFileHash({
-  file,
-  alg,
-}: {
-  file: string
-  alg: string
-}): Promise<string | undefined> {
+export async function getFileHash({ file, alg }: { file: string; alg: string }): Promise<string | undefined> {
   const exists = await fse.pathExists(file)
   if (!exists) return
 
@@ -35,5 +29,4 @@ export const isGot404Error = (e?: Error) => e instanceof HTTPError && e.response
  * or e is a pretry.{@link RetryError} with all member of e.errors is a got.{@link HTTPError}
  */
 export const is404Error = (e?: Error) =>
-  isGot404Error(e) ||
-  (e instanceof RetryError && e.errors.every((childError) => isGot404Error(childError)))
+  isGot404Error(e) || (e instanceof RetryError && e.errors.every((childError) => isGot404Error(childError)))

@@ -1,9 +1,9 @@
-import { EventEmitter } from 'events'
+import { EventEmitter } from 'node:events'
+import path from 'node:path'
+import { pipeline } from 'node:stream/promises'
 import fse from 'fs-extra'
-import got, { Got, OptionsInit, Progress } from 'got'
-import path from 'path'
+import got, { type Got, type OptionsInit, type Progress } from 'got'
 import { ProxyAgent } from 'proxy-agent'
-import { pipeline } from 'stream/promises'
 import { baseDebug } from './common'
 import { getFileHash, is404Error } from './util'
 
@@ -175,12 +175,7 @@ export class Vampire extends EventEmitter {
     if (expectHash && expectHashAlgorithm) {
       const hash = await getFileHash({ file, alg: expectHashAlgorithm })
       if (hash !== expectHash) {
-        debug(
-          'needDownload for hash mismatch: alg=%s actual(%s) != expect(%s)',
-          expectHashAlgorithm,
-          hash,
-          expectHash,
-        )
+        debug('needDownload for hash mismatch: alg=%s actual(%s) != expect(%s)', expectHashAlgorithm, hash, expectHash)
         return true
       }
     }

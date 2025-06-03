@@ -1,8 +1,0 @@
-# root
-root: true
-
-extends:
-  - '@magicdawn'
-
-rules:
-  no-unused-vars: warn

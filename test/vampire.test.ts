@@ -4,7 +4,7 @@ import dl, { Vampire } from '../src'
 import { getFileHash } from '../src/util'
 
 const url = 'https://www.baidu.com/img/bd_logo1.png'
-const file = __dirname + '/../example-files/bd_logo1.vampire.png'
+const file = `${__dirname}/../example-files/bd_logo1.vampire.png`
 const redo = () => dl({ url, file, skipExists: false })
 
 describe('Vampire', function () {
@@ -46,22 +46,16 @@ describe('Vampire', function () {
       const md5 = await getFileHash({ file, alg: 'md5' })
 
       // correct
-      ;(
-        await vampire.needDownload({ url, file, expectHash: md5, expectHashAlgorithm: 'md5' })
-      ).should.equal(false)
-      ;(
-        await vampire.needDownload({ url, file, expectHash: sha1, expectHashAlgorithm: 'sha1' })
-      ).should.equal(false)
+      ;(await vampire.needDownload({ url, file, expectHash: md5, expectHashAlgorithm: 'md5' })).should.equal(false)
+      ;(await vampire.needDownload({ url, file, expectHash: sha1, expectHashAlgorithm: 'sha1' })).should.equal(false)
 
       // incorrect
-      ;(
-        await vampire.needDownload({ url, file, expectHash: md5 + '1', expectHashAlgorithm: 'md5' })
-      ).should.equal(true)
+      ;(await vampire.needDownload({ url, file, expectHash: `${md5}1`, expectHashAlgorithm: 'md5' })).should.equal(true)
       ;(
         await vampire.needDownload({
           url,
           file,
-          expectHash: sha1 + '2',
+          expectHash: `${sha1}2`,
           expectHashAlgorithm: 'sha1',
         })
       ).should.equal(true)
