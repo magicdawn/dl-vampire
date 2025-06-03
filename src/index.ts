@@ -6,17 +6,11 @@ export { Vampire } from './vampire'
 // types
 export type { DlOptions } from './dl'
 export type { ReadUrlOptions, ReadUrlOptionsWithEncoding } from './read-url'
-export type {
-  OnProgress,
-  Progress,
-  ValidateExistingFileOptions,
-  VampireNewOptions,
-} from './vampire'
+export type { OnProgress, Progress, ValidateExistingFileOptions, VampireNewOptions } from './vampire'
 
 /**
  * errors
  */
-
 export {
   CacheError,
   CancelError,

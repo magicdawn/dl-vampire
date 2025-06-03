@@ -1,13 +1,7 @@
 import assert from 'node:assert'
-import { HTTPError } from 'got'
+import { HTTPError, RequestError } from 'got'
 import pretry, { RetryError, type RetryOptions } from 'promise.retry'
-import {
-  Vampire,
-  type DownloadInput,
-  type OnProgress,
-  type ValidateExistingFileOptions,
-  type VampireNewOptions,
-} from './vampire'
+import { Vampire, type DownloadInput, type OnProgress, type ValidateExistingFileOptions, type VampireNewOptions } from './vampire'
 
 export type DlOptions = VampireNewOptions & // new Vampire()
   DownloadInput & // file & url
@@ -93,23 +87,27 @@ export async function dl(options: DlOptions) {
 }
 
 export function inspectError(e: Error | undefined, { url, file }: Pick<DlOptions, 'url' | 'file'>) {
-  if (e instanceof HTTPError) {
-    console.error('[dl-vampire]: HTTPError happens for url=%s file=%s statusCode=%s', url, file, e.response.statusCode)
+  if (e instanceof RequestError) {
+    return console.error('[dl-vampire]: RequestError happens for url=%s file=%s code=%s', url, file, e.code)
   }
-  //
-  else if (e instanceof RetryError) {
+  if (e instanceof HTTPError) {
+    return console.error('[dl-vampire]: HTTPError happens for url=%s file=%s statusCode=%s', url, file, e.response.statusCode)
+  }
+  if (e instanceof RetryError) {
     const innerErrorTypes = new Set(e.errors.map((e) => e.constructor.name))
-    const statusCodes = new Set(e.errors.map((e) => e instanceof HTTPError && e.response.statusCode).filter(Boolean))
+    const statusCodes = new Set(e.errors.map((e) => (e instanceof HTTPError ? e.response.statusCode : undefined)).filter(Boolean))
+    const errorCodes = new Set(
+      e.errors.map((e) => (e instanceof RequestError && !(e instanceof HTTPError) ? e.code : undefined)).filter(Boolean),
+    )
     console.error(
-      `[dl-vampire]: RetryError(inner errorType:%o statusCodes:%o happens for url=%s file=%s`,
+      `[dl-vampire]: RetryError(inner errorType:%o  HTTPError.statusCode:%o  RequestError.code:%o) happens for url=%s file=%s`,
       innerErrorTypes,
       statusCodes,
+      errorCodes,
       url,
       file,
     )
   }
-  //
-  else {
-    console.error('[dl-vampire]: error happens for url=%s file=%s', url, file)
-  }
+
+  console.error('[dl-vampire]: error happens for url=%s file=%s', url, file)
 }

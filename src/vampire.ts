@@ -9,8 +9,7 @@ import { getFileHash, is404Error } from './util'
 
 const debug = baseDebug.extend('vampire')
 
-const CHROME_UA =
-  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
+const CHROME_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
 
 export interface VampireNewOptions {
   /**
@@ -211,10 +210,7 @@ export class Vampire extends EventEmitter {
   /**
    * 下载一个文件
    */
-  download = async (
-    { url, file, onprogress }: { url: string; file: string; onprogress?: OnProgress },
-    signal?: AbortSignal,
-  ) => {
+  download = async ({ url, file, onprogress }: { url: string; file: string; onprogress?: OnProgress }, signal?: AbortSignal) => {
     // network
     const networkStream = this.request.stream(url)
     if (onprogress) {
