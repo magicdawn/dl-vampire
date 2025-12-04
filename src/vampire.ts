@@ -69,6 +69,8 @@ export type { Progress }
  */
 export type OnProgress = (progress: Progress) => void
 
+// TODO: explore Node.js specific EventTraget
+// eslint-disable-next-line unicorn/prefer-event-target
 export class Vampire extends EventEmitter {
   constructor(options?: VampireNewOptions) {
     super()
@@ -145,7 +147,7 @@ export class Vampire extends EventEmitter {
       return lenNum
     } catch (e) {
       if (is404Error(e)) {
-        return undefined
+        return
       } else {
         throw e
       }
@@ -211,15 +213,14 @@ export class Vampire extends EventEmitter {
    * 下载一个文件
    */
   download = async ({ url, file, onprogress }: { url: string; file: string; onprogress?: OnProgress }, signal?: AbortSignal) => {
-    // network
-    const networkStream = this.request.stream(url)
-    if (onprogress) {
-      networkStream.on('downloadProgress', onprogress)
-    }
-
-    // file
+    // prepare
+    // 创建 stream, then pipeline. 中间不能有异步操作, 否则可能在 pipeline 调用前 emit error 了, 就成了 unhandled error event
     file = path.resolve(file)
     await fse.ensureDir(path.dirname(file))
+
+    // create streams
+    const networkStream = this.request.stream(url)
+    if (onprogress) networkStream.on('downloadProgress', onprogress)
     const fileStream = fse.createWriteStream(file)
 
     // clean when cancel
